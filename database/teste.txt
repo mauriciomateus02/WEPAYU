@@ -1,4 +1,0 @@
-1;Joao da Silva;Rua dos Jooes, 333 - Campina Grande;horista;false;23,00
-2;Mariazinha;Rua das Marias, 333 - Campina Grande;horista;false;2300,00
-3;Gaiato Vendedor;Rua dos Bufoes, 333 - Campina Grande;comissionado;false;1300,00;0,05
-4;Gorete;Rua das Marias, 333 - Campina Grande;assalariado;false;2300,00
