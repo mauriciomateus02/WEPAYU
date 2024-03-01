@@ -1,12 +1,12 @@
 package br.ufal.ic.p2.wepayu.models;
 
-public abstract class Empregado {
+public abstract class Employee {
     private String nome;
     private String endereco;
     private String tipo;
     private Boolean sindic;
 
-    public Empregado(String nome, String endereco, String tipo) {
+    public Employee(String nome, String endereco, String tipo) {
         this.nome = nome;
         this.endereco = endereco;
         this.tipo = tipo;
