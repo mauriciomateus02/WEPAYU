@@ -44,7 +44,7 @@ expectError "Empregado nao eh comissionado." getVendasRealizadas emp=${id3} data
 expectError "Empregado nao eh comissionado." getVendasRealizadas emp=${id4} dataInicial=1/1/2005 dataFinal=2/1/2005
 expectError "Data inicial invalida." getVendasRealizadas emp=${id1} dataInicial=41/1/2005 dataFinal=2/1/2005
 expectError "Data final invalida." getVendasRealizadas emp=${id1} dataInicial=1/1/2005 dataFinal=30/2/2005
-expectError "Data inicial nao pode ser posterior aa data final." getVendasRealizadas emp=${id1} dataInicial=2/1/2005 dataFinal=1/1/2005
+expectError "Data inicial nao pode ser posterior a data final." getVendasRealizadas emp=${id1} dataInicial=2/1/2005 dataFinal=1/1/2005
 
 encerrarSistema
 quit

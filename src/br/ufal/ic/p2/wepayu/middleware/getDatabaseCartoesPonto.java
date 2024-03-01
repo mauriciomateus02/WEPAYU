@@ -1,17 +1,17 @@
-package br.ufal.ic.p2.wepayu.utils;
+package br.ufal.ic.p2.wepayu.middleware;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.HashMap;
 
-import br.ufal.ic.p2.wepayu.controller.CartaoController;
+import br.ufal.ic.p2.wepayu.controller.CardController;
 
 public class getDatabaseCartoesPonto {
 
     public static void getDatabaseCartoes() throws FileNotFoundException {
 
-        CartaoController.CartaoPontos = new HashMap<>();
+        CardController.CartaoPontos = new HashMap<>();
 
         try {
 
@@ -38,7 +38,7 @@ public class getDatabaseCartoesPonto {
                 for (String str : newlinha) {
 
                     String stg[] = str.split(";");
-                    CartaoController.lancaCartao(index, stg[0], stg[1]);
+                    CardController.lancaCartao(index, stg[0], stg[1]);
                 }
             }
 

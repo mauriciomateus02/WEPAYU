@@ -2,7 +2,7 @@ package br.ufal.ic.p2.wepayu.models;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 
-public class EmpregadoAssalariado extends Empregado {
+public class EmpregadoAssalariado extends Employee {
 
     private float salarioMensal;
 
@@ -23,7 +23,8 @@ public class EmpregadoAssalariado extends Empregado {
 
     @Override
     public String toString() {
-        return getNome() + ";" + getEndereco() + ";" + getTipo() + ";" + getSindicalizado() + ";" + getSalario();
+        return getNome() + ";" + getEndereco() + ";" + getTipo() + ";" + getSindicalizado() + ";" + getSalario()
+                + "->[]";
     }
 
 }

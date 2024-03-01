@@ -1,8 +1,11 @@
 package br.ufal.ic.p2.wepayu.utils;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
+import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
+import br.ufal.ic.p2.wepayu.controller.EmployeeController;
+import br.ufal.ic.p2.wepayu.models.EnumType.Contract;
 
-public class validatorEmpregado {
+public class ValidatorEmployee {
 
     public static void validatorEmpregados(String nome, String endereco, String tipo, String salario)
             throws ExceptionCriarEmpregado {
@@ -100,4 +103,39 @@ public class validatorEmpregado {
             throw new ExceptionCriarEmpregado("Salario deve ser numerico.");
         }
     }
+
+    public static void EmployeeType(String emp, Contract type) throws ExceptionGetEmpregado {
+
+        if (emp.isEmpty()) {
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
+        }
+
+        if (EmployeeController.Empregados.containsKey(emp)) {
+
+            switch (type) {
+                case COMMISSiONED:
+                    if (!EmployeeController.Empregados.get(emp).getTipo().equals("comissionado")) {
+                        throw new ExceptionGetEmpregado("Empregado nao eh comissionado.");
+                    }
+                    break;
+
+                case SALARIED:
+                    if (!EmployeeController.Empregados.get(emp).getTipo().equals("assalariado"))
+                        throw new ExceptionGetEmpregado("Empregado nao eh assalariado.");
+                    break;
+
+                case HOURLY:
+                    if (!EmployeeController.Empregados.get(emp).getTipo().equals("horista"))
+                        throw new ExceptionGetEmpregado("Empregado nao eh horista.");
+                    break;
+
+                default:
+                    break;
+            }
+
+        } else {
+            throw new ExceptionGetEmpregado("Empregado nao existe.");
+        }
+    }
+
 }

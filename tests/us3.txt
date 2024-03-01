@@ -33,7 +33,6 @@ expect 0 getHorasNormaisTrabalhadas emp=${id1} dataInicial=1/1/2005 dataFinal=1/
 expect 0 getHorasExtrasTrabalhadas emp=${id1} dataInicial=1/1/2005 dataFinal=1/1/2005
 expect 0 getHorasNormaisTrabalhadas emp=${id1} dataInicial=5/1/2005 dataFinal=1/2/2005
 expect 0 getHorasExtrasTrabalhadas emp=${id1} dataInicial=5/1/2005 dataFinal=1/2/2005
-
 expect 8 getHorasNormaisTrabalhadas emp=${id2} dataInicial=1/1/2005 dataFinal=31/12/2005
 expect 2 getHorasExtrasTrabalhadas emp=${id2} dataInicial=1/1/2005 dataFinal=31/12/2005
 
