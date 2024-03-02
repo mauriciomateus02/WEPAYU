@@ -9,10 +9,10 @@ import br.ufal.ic.p2.wepayu.Exception.SaleAmountException;
 import br.ufal.ic.p2.wepayu.controller.CardController;
 import br.ufal.ic.p2.wepayu.controller.EmployeeController;
 import br.ufal.ic.p2.wepayu.controller.SaleController;
-import br.ufal.ic.p2.wepayu.middleware.uploadEmpregados;
-import br.ufal.ic.p2.wepayu.middleware.getDatabaseCartoesPonto;
-import br.ufal.ic.p2.wepayu.middleware.getDatabaseEmployee;
-import br.ufal.ic.p2.wepayu.middleware.uploadCartoes;
+import br.ufal.ic.p2.wepayu.controller.UnionServiceController;
+import br.ufal.ic.p2.wepayu.middleware.UploadDatabase;
+import br.ufal.ic.p2.wepayu.middleware.getDatabase;
+import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -20,16 +20,17 @@ import java.util.zip.DataFormatException;
 
 public class Facade {
 
-    uploadEmpregados uplEmp;
-    uploadCartoes uploadCartoes;
+    UploadDatabase uplEmp;
 
     public Facade() throws FileNotFoundException {
-        getDatabaseEmployee.getDatabaseEmpregado();
-        getDatabaseCartoesPonto.getDatabaseCartoes();
+        getDatabase.getDatabaseEntites(getEnumDatabase.Employee, EmployeeController.Empregados);
+        getDatabase.getDatabaseEntites(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
+
     }
 
     public void zerarSistema() {
         EmployeeController.Empregados = new HashMap<>();
+        UnionServiceController.employeesUnionzed = new HashMap<>();
         CardController.CartaoPontos = new HashMap<>();
     }
 
@@ -62,8 +63,9 @@ public class Facade {
     }
 
     public void encerrarSistema() throws ExceptionCriarEmpregado, EmpregadoNaoExisteException {
-        uplEmp = new uploadEmpregados();
-        uploadCartoes = new uploadCartoes();
+        // faz o upload dos empregados criados
+        UploadDatabase.uploadData(getEnumDatabase.Employee, EmployeeController.Empregados);
+        UploadDatabase.uploadData(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
     }
 
     public void removerEmpregado(String emp)
@@ -98,4 +100,42 @@ public class Facade {
             throws DateInvalideException, ExceptionGetEmpregado {
         return SaleController.sumOfSalesAmount(emp, dateInitial, deadline);
     }
+
+    public void alteraEmpregado(String emp, String attribute, String value, String unionizedID, String unionFee)
+            throws ExceptionGetEmpregado, EmpregadoNaoExisteException {
+
+        if (emp.isEmpty()) {
+            throw new ExceptionGetEmpregado("Identificacao do membro nao pode ser nula.");
+        } else if (!EmployeeController.Empregados.containsKey(emp)) {
+            throw new EmpregadoNaoExisteException();
+        }
+
+        EmployeeController.setEmployee(emp, attribute, value);
+
+        UnionServiceController.createEmployeeUnionzed(emp, unionizedID, unionFee);
+
+    }
+
+    public void alteraEmpregado(String emp, String attribute, String value)
+            throws ExceptionGetEmpregado, EmpregadoNaoExisteException {
+        if (emp.isEmpty()) {
+            throw new ExceptionGetEmpregado("Identificacao do membro nao pode ser nula.");
+        } else if (!EmployeeController.Empregados.containsKey(emp)) {
+            throw new EmpregadoNaoExisteException();
+        }
+
+        EmployeeController.setEmployee(emp, attribute, value);
+
+    }
+
+    public String getTaxasServico(String emp, String dateInitial, String deadline)
+            throws ExceptionGetEmpregado, DateInvalideException, EmpregadoNaoExisteException {
+        return UnionServiceController.getServiceFee(emp, dateInitial, deadline);
+    }
+
+    public void lancaTaxaServico(String unionizedID, String date, String value)
+            throws DateInvalideException, ExceptionGetEmpregado {
+        UnionServiceController.createServiceFee(unionizedID, date, value);
+    }
+
 }

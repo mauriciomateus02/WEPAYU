@@ -63,7 +63,7 @@ public class CardController {
             throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
         }
         // verifica a existencia de erros
-        Validator.validatorDatesSearch(dataInicio, dataFinal);
+        Validator.validateSearchDate(dataInicio, dataFinal);
 
         if (EmployeeController.Empregados.containsKey(emp)) {
 

@@ -8,7 +8,7 @@ import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionRemoveEmpregado;
-import br.ufal.ic.p2.wepayu.middleware.getDatabaseEmployee;
+import br.ufal.ic.p2.wepayu.middleware.RemoveInDatabase;
 import br.ufal.ic.p2.wepayu.models.EmpregadoHorista;
 import br.ufal.ic.p2.wepayu.models.Employee;
 import br.ufal.ic.p2.wepayu.models.EmpregadoAssalariado;
@@ -73,19 +73,6 @@ public class EmployeeController {
             throw new ExceptionCriarEmpregado("Tipo invalido.");
         }
 
-    }
-
-    public static String AdicionarEmpregado(Employee emp) {
-        String id = Integer.toString(index);
-
-        Empregados.put(id, emp);
-        index++;
-        return id;
-
-    }
-
-    public static void backupDatabase(String id, Employee emp) {
-        Empregados.put(id, emp);
     }
 
     public static String getEmpregadoPorNome(String nome, int id) throws ExceptionGetEmpregado {
@@ -153,10 +140,39 @@ public class EmployeeController {
         } else if (Empregados.get(emp) == null) {
             throw new EmpregadoNaoExisteException();
         } else {
-            getDatabaseEmployee.removeEmpregado(emp);
+            RemoveInDatabase.removeEmpregado(emp);
             Empregados.remove(emp);
         }
 
     }
 
+    public static String AdicionarEmpregado(Employee emp) {
+        String id = Integer.toString(index);
+
+        Empregados.put(id, emp);
+        index++;
+        return id;
+
+    }
+
+    public static void setEmployee(String emp, String attribute, String value)
+            throws ExceptionGetEmpregado, EmpregadoNaoExisteException {
+        if (emp.isEmpty()) {
+            throw new ExceptionGetEmpregado("Identificacao do membro nao pode ser nula.");
+        }
+
+        switch (attribute) {
+            case "sindicalizado":
+                if (Empregados.containsKey(emp)) {
+                    Empregados.get(emp).setSindicalizado(Boolean.parseBoolean(value));
+                } else {
+                    throw new EmpregadoNaoExisteException();
+                }
+                break;
+
+            default:
+                throw new ExceptionGetEmpregado("Atributo não existe");
+        }
+
+    }
 }

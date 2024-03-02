@@ -4,7 +4,7 @@ import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.controller.EmployeeController;
-import br.ufal.ic.p2.wepayu.models.EnumType.getActiveTurn;
+import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumActiveTurn;
 
 public class ValidatorCartaoPontos {
 
@@ -20,9 +20,9 @@ public class ValidatorCartaoPontos {
             // se ele for horista ele continua as validações.
             if (tipo.equals("horista")) {
                 // valida se a data está escrita certo.
-                // getActiveTurn.Default significa que é uma validação normal e dirá se a data é
-                // valida ou não
-                Validator.validatorDate(data, getActiveTurn.Default);
+                // getEnumActiveTurn.Default significa que é uma validação normal e dirá se a
+                // data é valida ou não
+                Validator.validatorDate(data, getEnumActiveTurn.Default);
                 // verifica se as horas foram passadas.
                 Validator.validatorHours(hora);
 

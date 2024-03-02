@@ -3,7 +3,7 @@ package br.ufal.ic.p2.wepayu.utils;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.controller.EmployeeController;
-import br.ufal.ic.p2.wepayu.models.EnumType.Contract;
+import br.ufal.ic.p2.wepayu.utils.EnumType.EnumContract;
 
 public class ValidatorEmployee {
 
@@ -104,7 +104,7 @@ public class ValidatorEmployee {
         }
     }
 
-    public static void EmployeeType(String emp, Contract type) throws ExceptionGetEmpregado {
+    public static void EmployeeType(String emp, EnumContract type) throws ExceptionGetEmpregado {
 
         if (emp.isEmpty()) {
             throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");

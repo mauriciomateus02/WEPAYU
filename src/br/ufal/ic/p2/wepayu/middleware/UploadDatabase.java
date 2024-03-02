@@ -3,18 +3,29 @@ package br.ufal.ic.p2.wepayu.middleware;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
-import br.ufal.ic.p2.wepayu.controller.EmployeeController;
-import br.ufal.ic.p2.wepayu.models.Employee;
+import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
 
-public class uploadEmpregados {
+public class UploadDatabase {
 
-    final static String outputFile = "database/teste.txt";
+    private static String outputFile;
 
-    public uploadEmpregados() throws EmpregadoNaoExisteException, ExceptionCriarEmpregado {
+    public static <T> void uploadData(getEnumDatabase EnumDatabase, HashMap<String, T> map)
+            throws EmpregadoNaoExisteException, ExceptionCriarEmpregado {
+
+        switch (EnumDatabase) {
+            case Employee:
+                outputFile = "database/Employee.txt";
+                break;
+            case Unionized:
+                outputFile = "database/Unionized.txt";
+            default:
+                break;
+        }
 
         File file = new File(outputFile);
         BufferedWriter bf = null;
@@ -24,7 +35,7 @@ public class uploadEmpregados {
             // cria o buffer para salvar os dados no txt
             bf = new BufferedWriter(new FileWriter(file, true));
 
-            for (Map.Entry<String, Employee> entry : EmployeeController.Empregados.entrySet()) {
+            for (Map.Entry<String, T> entry : map.entrySet()) {
                 // adiciona todas as informações dos empregados no txt
 
                 bf.write(entry.getKey() + ";" + entry.getValue().toString());
