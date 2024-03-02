@@ -8,12 +8,12 @@ import java.time.LocalDate;
 import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.SaleAmountException;
-import br.ufal.ic.p2.wepayu.models.EnumType.Contract;
-import br.ufal.ic.p2.wepayu.models.EnumType.getActiveTurn;
 import br.ufal.ic.p2.wepayu.utils.Conversor;
 import br.ufal.ic.p2.wepayu.utils.Validator;
 import br.ufal.ic.p2.wepayu.utils.ValidatorEmployee;
 import br.ufal.ic.p2.wepayu.utils.ValidatorSale;
+import br.ufal.ic.p2.wepayu.utils.EnumType.EnumContract;
+import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumActiveTurn;
 
 public class SaleController {
 
@@ -21,12 +21,12 @@ public class SaleController {
             throws DateInvalideException, SaleAmountException, ExceptionGetEmpregado {
 
         // valida se a data está correta
-        Validator.validatorDate(date, getActiveTurn.Default);
+        Validator.validatorDate(date, getEnumActiveTurn.Default);
         // valida se a quantia é válida
         ValidatorSale.validateSaleAmount(value);
 
         // valida se o empragado é tipo commisionado
-        ValidatorEmployee.EmployeeType(emp, Contract.COMMISSiONED);
+        ValidatorEmployee.EmployeeType(emp, EnumContract.COMMISSiONED);
 
         // converte numero do tipo 20,00 em 20.00
         value = Conversor.converterInvertedCharacter(value);
@@ -44,10 +44,10 @@ public class SaleController {
     public static String sumOfSalesAmount(String emp, String startDate, String deadline)
             throws DateInvalideException, ExceptionGetEmpregado {
 
-        ValidatorEmployee.EmployeeType(emp, Contract.COMMISSiONED);
-        Validator.validatorDate(startDate, getActiveTurn.InitialDate);
-        Validator.validatorDate(deadline, getActiveTurn.DeadLine);
-        Validator.validatorDatesSearch(startDate, deadline);
+        ValidatorEmployee.EmployeeType(emp, EnumContract.COMMISSiONED);
+        Validator.validatorDate(startDate, getEnumActiveTurn.InitialDate);
+        Validator.validatorDate(deadline, getEnumActiveTurn.DeadLine);
+        Validator.validateSearchDate(startDate, deadline);
 
         EmpregadoComissionado employee = (EmpregadoComissionado) EmployeeController.Empregados.get(emp);
 

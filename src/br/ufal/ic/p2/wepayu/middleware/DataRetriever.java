@@ -2,13 +2,16 @@ package br.ufal.ic.p2.wepayu.middleware;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.controller.EmployeeController;
+import br.ufal.ic.p2.wepayu.controller.UnionServiceController;
 import br.ufal.ic.p2.wepayu.models.CartaoPontos;
 import br.ufal.ic.p2.wepayu.models.EmpregadoAssalariado;
 import br.ufal.ic.p2.wepayu.models.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.EmpregadoHorista;
 import br.ufal.ic.p2.wepayu.models.Sale;
+import br.ufal.ic.p2.wepayu.models.ServiceFee;
+import br.ufal.ic.p2.wepayu.models.Unionized;
 
-public class setDataEmployee {
+public class DataRetriever {
 
     public static void setEmployee(String index, String name, String address, String type, String unionized,
             float salary, String[] list) throws ExceptionCriarEmpregado {
@@ -32,7 +35,11 @@ public class setDataEmployee {
 
         }
 
-        EmployeeController.index = Integer.parseInt(index);
+        // verifica se o index do empregado é maior para poder se associar
+        if (EmployeeController.index <= Integer.parseInt(index)) {
+            EmployeeController.index = Integer.parseInt(index);
+        }
+
     }
 
     public static void setEmployee(String index, String name, String address, String type, String unionized,
@@ -53,7 +60,11 @@ public class setDataEmployee {
             EmployeeController.Empregados.put(index, emp);
         }
 
-        EmployeeController.index = Integer.parseInt(index);
+        // verifica se o index do empregado é maior para poder se associar
+        if (EmployeeController.index <= Integer.parseInt(index)) {
+            EmployeeController.index = Integer.parseInt(index);
+
+        }
     }
 
     public static void setEmployee(String index, String name, String address, String type, String unionized,
@@ -79,7 +90,11 @@ public class setDataEmployee {
 
         }
 
-        EmployeeController.index = Integer.parseInt(index);
+        // verifica se o index do empregado é maior para poder se associar
+        if (EmployeeController.index <= Integer.parseInt(index)) {
+            EmployeeController.index = Integer.parseInt(index);
+
+        }
     }
 
     public static void setEmployee(String index, String name, String address, String type, String unionized,
@@ -93,7 +108,26 @@ public class setDataEmployee {
 
             EmployeeController.Empregados.put(index, emp);
         }
-
-        EmployeeController.index = Integer.parseInt(index);
+        // verifica se o index do empregado é maior para poder se associar
+        if (EmployeeController.index <= Integer.parseInt(index)) {
+            EmployeeController.index = Integer.parseInt(index);
+        }
     }
+
+    public static void setUnionized(String index, String employeeID, String unionFee, String[] listService) {
+        // cria um objeto do tipo sindicato
+        Unionized union = new Unionized(index, employeeID, Float.parseFloat(unionFee));
+
+        for (String service : listService) {
+            // adiciona no empregado
+            String[] data = service.split(";");
+            ServiceFee servicefee = new ServiceFee(data[0], Float.parseFloat(data[1]));
+
+            union.addServiceFee(servicefee);
+
+        }
+
+        UnionServiceController.addUnionized(union, index);
+    }
+
 }

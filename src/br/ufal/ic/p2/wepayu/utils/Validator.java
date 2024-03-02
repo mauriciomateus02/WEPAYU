@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
-import br.ufal.ic.p2.wepayu.models.EnumType.getActiveTurn;
+import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumActiveTurn;
 
 public class Validator {
 
-    public static void validatorDate(String data, getActiveTurn tipo) throws DateInvalideException {
+    public static void validatorDate(String data, getEnumActiveTurn tipo) throws DateInvalideException {
 
         String[] formato = { "d/M/yyyy", "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy" };
         int cont = 0;
@@ -120,9 +120,9 @@ public class Validator {
         return false;
     }
 
-    public static void validatorDatesSearch(String dateInitial, String deadline) throws DateInvalideException {
-        Validator.validatorDate(dateInitial, getActiveTurn.InitialDate);
-        Validator.validatorDate(deadline, getActiveTurn.DeadLine);
+    public static void validateSearchDate(String dateInitial, String deadline) throws DateInvalideException {
+        Validator.validatorDate(dateInitial, getEnumActiveTurn.InitialDate);
+        Validator.validatorDate(deadline, getEnumActiveTurn.DeadLine);
 
         LocalDate startDate = null, dateFinal = null;
 
