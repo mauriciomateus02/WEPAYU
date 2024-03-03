@@ -139,4 +139,5 @@ public class Validator {
             throw new DateInvalideException("Data inicial nao pode ser posterior a data final.");
         }
     }
+
 }

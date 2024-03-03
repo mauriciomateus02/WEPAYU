@@ -6,8 +6,9 @@ import java.io.FileReader;
 import java.util.HashMap;
 
 import br.ufal.ic.p2.wepayu.controller.EmployeeController;
+import br.ufal.ic.p2.wepayu.controller.PaymentController;
 import br.ufal.ic.p2.wepayu.controller.UnionServiceController;
-import br.ufal.ic.p2.wepayu.models.Unionized;
+import br.ufal.ic.p2.wepayu.models.Unionized.Unionized;
 import br.ufal.ic.p2.wepayu.utils.Conversor;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
 
@@ -27,6 +28,10 @@ public class getDatabase {
                 UnionServiceController.employeesUnionzed = new HashMap<>();
                 file = "database/Unionized.txt";
                 break;
+            case Payment:
+                PaymentController.methodsPayment = new HashMap<>();
+                file = "database/Payment.txt";
+                break;
             default:
                 file = null;
                 break;
@@ -36,7 +41,6 @@ public class getDatabase {
 
             String linha;
             BufferedReader reader = new BufferedReader(new FileReader(file));
-
             while ((linha = reader.readLine()) != null) {
 
                 String[] database = linha.split("->");
@@ -69,14 +73,31 @@ public class getDatabase {
                                 Float.parseFloat(objs[6]), list);
                     }
 
-                } else {
+                }
+
+                else if (objs.length == 3) {
+
+                    if (objs[2].equals("emMaos") || objs[2].equals("correios")) {
+                        DataRetriever.setPayment(objs[1], objs[2]);
+                    }
+                }
+
+                else if (objs.length == 6) {
+                    if (objs[2].equals("banco")) {
+                        DataRetriever.setPayment(objs[1], objs[2], objs[3], objs[4], objs[5]);
+                    }
+                }
+
+                else {
 
                     if (objs[0].contains("s")) {
+
                         // como é usado no employee cada objs represneta uma informação da class
                         Unionized union = new Unionized(objs[1], objs[2], Float.parseFloat(objs[3]));
                         UnionServiceController.addUnionized(union, objs[0]);
 
-                    } else if (objs[3].equals("assalariado") || objs[3].equals("horista")) {
+                    }
+                    if (objs[3].equals("assalariado") || objs[3].equals("horista")) {
                         // converte a virgula em ponto ex.: 20,00 em 20.00
                         if (objs[5].contains(","))
                             objs[5] = Conversor.converterInvertedCharacter(objs[5]);
@@ -84,10 +105,7 @@ public class getDatabase {
                         DataRetriever.setEmployee(objs[0], objs[1], objs[2], objs[3], objs[4],
                                 Float.parseFloat(objs[5]));
 
-                    }
-
-                    else if (objs[3].equals("comissionado")) {
-
+                    } else if (objs[3].equals("comissionado")) {
                         // converte a comissão e o salario para o tipo float
                         objs[5] = Conversor.converterInvertedCharacter(objs[5]);
                         objs[6] = Conversor.converterInvertedCharacter(objs[6]);
@@ -95,7 +113,6 @@ public class getDatabase {
                         DataRetriever.setEmployee(objs[0], objs[1], objs[2], objs[3], objs[4],
                                 Float.parseFloat(objs[5]),
                                 Float.parseFloat(objs[6]));
-
                     }
                 }
             }

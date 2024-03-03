@@ -1,7 +1,8 @@
-package br.ufal.ic.p2.wepayu.models;
+package br.ufal.ic.p2.wepayu.models.Employee.Hourly;
 
 import java.util.ArrayList;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
+import br.ufal.ic.p2.wepayu.models.Employee.Employee;
 
 public class EmpregadoHorista extends Employee {
 
@@ -34,6 +35,11 @@ public class EmpregadoHorista extends Employee {
     public String toString() {
         return getNome() + ";" + getEndereco() + ";" + getTipo() + ";" + getSindicalizado() + ";" + getSalario() + ";"
                 + "->" + cartaoPontos;
+    }
+
+    @Override
+    public void setSalario(float salario) {
+        this.salarioHora = salario;
     }
 
 }

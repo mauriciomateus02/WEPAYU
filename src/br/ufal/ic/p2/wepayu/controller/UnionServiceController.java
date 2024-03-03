@@ -2,13 +2,12 @@ package br.ufal.ic.p2.wepayu.controller;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Map;
 
 import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
-import br.ufal.ic.p2.wepayu.models.ServiceFee;
-import br.ufal.ic.p2.wepayu.models.Unionized;
+import br.ufal.ic.p2.wepayu.models.Unionized.ServiceFee;
+import br.ufal.ic.p2.wepayu.models.Unionized.Unionized;
 import br.ufal.ic.p2.wepayu.utils.Conversor;
 import br.ufal.ic.p2.wepayu.utils.Validator;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumActiveTurn;
@@ -19,20 +18,38 @@ public class UnionServiceController {
 
     public static void createEmployeeUnionzed(String employee, String unionID, String unionfee)
             throws ExceptionGetEmpregado {
-
+        // realiza a verificação dos campos
         if (employee.isEmpty()) {
-            throw new ExceptionGetEmpregado("Identificacao do membro nao pode ser nula.");
-        } else if (employeesUnionzed.containsKey(unionID)) {
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
+        }
+        if (employeesUnionzed.containsKey(unionID)) {
             throw new ExceptionGetEmpregado("Ha outro empregado com esta identificacao de sindicato");
         }
-        float valueUnionFee;
-        // verifica se a txa contém virgula e se tiver troca pelo ponto
-        // para poder converter o valor em float
-        valueUnionFee = (unionfee.contains(",")) ? Float.parseFloat(Conversor.converterInvertedCharacter(unionfee))
-                : Float.parseFloat(unionfee);
-        Unionized union = new Unionized(unionID, employee, valueUnionFee);
+        if (unionID.isEmpty()) {
+            throw new ExceptionGetEmpregado("Identificacao do sindicato nao pode ser nula.");
+        }
+        if (unionfee.isBlank()) {
+            throw new ExceptionGetEmpregado("Taxa sindical nao pode ser nula.");
+        }
 
-        employeesUnionzed.put(unionID, union);
+        try {
+
+            float valueUnionFee;
+            // verifica se a txa contém virgula e se tiver troca pelo ponto
+            // para poder converter o valor em float
+            valueUnionFee = (unionfee.contains(",")) ? Float.parseFloat(Conversor.converterInvertedCharacter(unionfee))
+                    : Float.parseFloat(unionfee);
+
+            Unionized union = new Unionized(unionID, employee, valueUnionFee);
+
+            employeesUnionzed.put(unionID, union);
+
+            // associa o empregado ao sindicato
+            EmployeeController.Empregados.get(employee).setUnionized(union);
+
+        } catch (Exception e) {
+            throw new ExceptionGetEmpregado("Taxa sindical deve ser numerica.");
+        }
     }
 
     public static boolean verificateEmployeeUnionzed(String unionID) {
@@ -43,7 +60,7 @@ public class UnionServiceController {
             throws DateInvalideException, ExceptionGetEmpregado {
 
         if (unionID.isEmpty())
-            throw new ExceptionGetEmpregado("Identificacao do membro nao pode ser nula.");
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
         else if (!verificateEmployeeUnionzed(unionID))
             throw new ExceptionGetEmpregado("Membro nao existe.");
         // verifica se a data passada é válida, default significa que a data será
@@ -62,13 +79,14 @@ public class UnionServiceController {
         ServiceFee service = new ServiceFee(date, valueUnionFee);
 
         employeesUnionzed.get(unionID).addServiceFee(service);
+
     }
 
     public static String getServiceFee(String employeeID, String startDate, String deadline)
             throws ExceptionGetEmpregado, DateInvalideException, EmpregadoNaoExisteException {
 
         if (employeeID.isEmpty()) {
-            throw new ExceptionGetEmpregado("Identificacao do membro nao pode ser nula.");
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
         }
         if (!EmployeeController.Empregados.get(employeeID).getSindicalizado()) {
             throw new ExceptionGetEmpregado("Empregado nao eh sindicalizado.");
@@ -85,25 +103,13 @@ public class UnionServiceController {
         String temp;
         float value = 0;
 
-        String index = null;
         // converte a data que foi enviada e verifica se está correta
         dateFinal = Conversor.converterDate(deadline, 2);
         // divide a data inicial para analisar o range
         String[] dateInitial = startDate.split("/");
 
-        // encontra o usuario do employee passado
-        for (Map.Entry<String, Unionized> entry : employeesUnionzed.entrySet()) {
-            if (entry.getValue().getEmployeeID().equals(employeeID)) {
-                index = entry.getKey();
-                break;
-            }
-
-        }
-        if (index == null) {
-            throw new EmpregadoNaoExisteException();
-        }
         // pega o empregado sindicalizado
-        Unionized union = employeesUnionzed.get(index);
+        Unionized union = EmployeeController.Empregados.get(employeeID).getUnionized();
 
         // verifica as taxas cobradas do empregado
         for (ServiceFee service : union.getServiceFee()) {
@@ -127,5 +133,41 @@ public class UnionServiceController {
 
     public static void addUnionized(Unionized union, String unionizedID) {
         employeesUnionzed.put(unionizedID, union);
+    }
+
+    public static void setUnionized(String employeeId, String unionID, String unionFee) throws ExceptionGetEmpregado {
+        if (employeeId.isEmpty()) {
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
+        }
+        if (unionID.isEmpty()) {
+            throw new ExceptionGetEmpregado("Identificacao do sindicato nao pode ser nula.");
+        }
+        if (unionFee.isBlank()) {
+            throw new ExceptionGetEmpregado("Taxa sindical nao pode ser nula.");
+        }
+
+        float auxFee = Conversor.conversorNumeric("taxaSindical", unionFee);
+
+        Unionized unionized;
+
+        // verifica se o empregado já é sindicalizado
+        if (EmployeeController.Empregados.get(employeeId).getSindicalizado())
+            unionized = employeesUnionzed.get(unionID);
+        // caso não seja sendicalizado é criado e atribuido
+        else
+            unionized = new Unionized(unionID, employeeId, null);
+
+        if (auxFee <= 0) {
+            throw new ExceptionGetEmpregado("Taxa sindical deve ser nao-negativa.");
+        }
+        // atualiza o valor da taxa sindical
+        unionized.setUnionFee(auxFee);
+
+        // atualiza o empregado
+        EmployeeController.Empregados.get(employeeId).setUnionized(unionized);
+
+        // salva a alteração no hashmap
+        employeesUnionzed.put(unionID, unionized);
+
     }
 }

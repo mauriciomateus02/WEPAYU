@@ -15,9 +15,9 @@ public class Main {
         // EasyAccept.main(new String[] { facade, "tests/us4_1.txt" });
         //
         // EasyAccept.main(new String[] { facade, "tests/us5.txt" });
-        EasyAccept.main(new String[] { facade, "tests/us5_1.txt" });
-        // EasyAccept.main(new String[]{facade, "tests/us6.txt"});
-        // EasyAccept.main(new String[]{facade, "tests/us6_1.txt"});
+        // EasyAccept.main(new String[] { facade, "tests/us5_1.txt" });
+        // EasyAccept.main(new String[] { facade, "tests/us6.txt" });
+        // EasyAccept.main(new String[] { facade, "tests/us6_1.txt" });
         // EasyAccept.main(new String[]{facade, "tests/us7.txt"});
         // EasyAccept.main(new String[]{facade, "tests/us8.txt"});
         // EasyAccept.main(new String[]{facade, "tests/us9.txt"});

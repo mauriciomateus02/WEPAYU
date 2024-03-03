@@ -1,8 +1,9 @@
-package br.ufal.ic.p2.wepayu.models;
+package br.ufal.ic.p2.wepayu.models.Employee.Commissioned;
 
 import java.util.ArrayList;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
+import br.ufal.ic.p2.wepayu.models.Employee.Employee;
 
 public class EmpregadoComissionado extends Employee {
 
@@ -32,6 +33,7 @@ public class EmpregadoComissionado extends Employee {
         return salario + comissao;
     }
 
+    @Override
     public void setSalario(float salario) {
         this.salario = salario;
     }
@@ -53,4 +55,5 @@ public class EmpregadoComissionado extends Employee {
         return getNome() + ";" + getEndereco() + ";" + getTipo() + ";" + getSindicalizado() + ";" + getSalario() + ";"
                 + getComissao() + "->" + sales;
     }
+
 }

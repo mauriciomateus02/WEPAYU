@@ -2,14 +2,19 @@ package br.ufal.ic.p2.wepayu.middleware;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.controller.EmployeeController;
+import br.ufal.ic.p2.wepayu.controller.PaymentController;
 import br.ufal.ic.p2.wepayu.controller.UnionServiceController;
-import br.ufal.ic.p2.wepayu.models.CartaoPontos;
-import br.ufal.ic.p2.wepayu.models.EmpregadoAssalariado;
-import br.ufal.ic.p2.wepayu.models.EmpregadoComissionado;
-import br.ufal.ic.p2.wepayu.models.EmpregadoHorista;
-import br.ufal.ic.p2.wepayu.models.Sale;
-import br.ufal.ic.p2.wepayu.models.ServiceFee;
-import br.ufal.ic.p2.wepayu.models.Unionized;
+import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
+import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.Sale;
+import br.ufal.ic.p2.wepayu.models.Employee.Hourly.CartaoPontos;
+import br.ufal.ic.p2.wepayu.models.Employee.Hourly.EmpregadoHorista;
+import br.ufal.ic.p2.wepayu.models.Employee.Salaried.EmpregadoAssalariado;
+import br.ufal.ic.p2.wepayu.models.Payment.Payment;
+import br.ufal.ic.p2.wepayu.models.Payment.PaymentInBank;
+import br.ufal.ic.p2.wepayu.models.Payment.PaymentInHands;
+import br.ufal.ic.p2.wepayu.models.Payment.PaymentInMail;
+import br.ufal.ic.p2.wepayu.models.Unionized.ServiceFee;
+import br.ufal.ic.p2.wepayu.models.Unionized.Unionized;
 
 public class DataRetriever {
 
@@ -128,6 +133,31 @@ public class DataRetriever {
         }
 
         UnionServiceController.addUnionized(union, index);
+        EmployeeController.Empregados.get(employeeID).setUnionized(union);
     }
 
+    public static void setPayment(String employeeID, String method) {
+        if (method.equals("emMaos")) {
+            Payment payment = new PaymentInHands(employeeID, method);
+            // vincula o pagamento ao empregado
+            EmployeeController.Empregados.get(employeeID).setMethodPayment(payment);
+            // salva no hashmap
+            PaymentController.methodsPayment.put(employeeID, payment);
+        } else {
+            Payment payment = new PaymentInMail(employeeID, method);
+            // vincula o pagamento ao empregado
+            EmployeeController.Empregados.get(employeeID).setMethodPayment(payment);
+            // salva no hashmap
+            PaymentController.methodsPayment.put(employeeID, payment);
+        }
+    }
+
+    public static void setPayment(String employeeID, String name, String bank, String agency, String accountNumber) {
+        // cria metodo do tipo pagamento em banco
+        Payment payment = new PaymentInBank(employeeID, name, bank, agency, accountNumber);
+        // vincula ao cliente
+        EmployeeController.Empregados.get(employeeID).setMethodPayment(payment);
+        // salva no hashmap
+        PaymentController.methodsPayment.put(employeeID, payment);
+    }
 }
