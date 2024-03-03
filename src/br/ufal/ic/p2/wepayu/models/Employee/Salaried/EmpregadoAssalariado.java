@@ -1,6 +1,7 @@
-package br.ufal.ic.p2.wepayu.models;
+package br.ufal.ic.p2.wepayu.models.Employee.Salaried;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
+import br.ufal.ic.p2.wepayu.models.Employee.Employee;
 
 public class EmpregadoAssalariado extends Employee {
 
@@ -25,6 +26,11 @@ public class EmpregadoAssalariado extends Employee {
     public String toString() {
         return getNome() + ";" + getEndereco() + ";" + getTipo() + ";" + getSindicalizado() + ";" + getSalario()
                 + "->[]";
+    }
+
+    @Override
+    public void setSalario(float salario) {
+        this.salarioMensal = salario;
     }
 
 }

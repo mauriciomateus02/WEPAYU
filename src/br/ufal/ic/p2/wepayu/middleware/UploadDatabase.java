@@ -12,7 +12,7 @@ import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
 
 public class UploadDatabase {
 
-    private static String outputFile;
+    private static String outputFile = null;
 
     public static <T> void uploadData(getEnumDatabase EnumDatabase, HashMap<String, T> map)
             throws EmpregadoNaoExisteException, ExceptionCriarEmpregado {
@@ -23,10 +23,13 @@ public class UploadDatabase {
                 break;
             case Unionized:
                 outputFile = "database/Unionized.txt";
+                break;
+            case Payment:
+                outputFile = "database/Payment.txt";
+                break;
             default:
                 break;
         }
-
         File file = new File(outputFile);
         BufferedWriter bf = null;
 
@@ -37,7 +40,6 @@ public class UploadDatabase {
 
             for (Map.Entry<String, T> entry : map.entrySet()) {
                 // adiciona todas as informações dos empregados no txt
-
                 bf.write(entry.getKey() + ";" + entry.getValue().toString());
                 bf.newLine();
             }

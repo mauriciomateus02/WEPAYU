@@ -4,6 +4,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
+import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
+import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
+import br.ufal.ic.p2.wepayu.controller.EmployeeController;
+import br.ufal.ic.p2.wepayu.models.Employee.Employee;
+import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
+import br.ufal.ic.p2.wepayu.models.Employee.Hourly.EmpregadoHorista;
+import br.ufal.ic.p2.wepayu.models.Employee.Salaried.EmpregadoAssalariado;
 
 public class Conversor {
 
@@ -56,4 +63,114 @@ public class Conversor {
 
         return str;
     }
+
+    static public void converterEmployee(String employeeID, Employee employee, String type)
+            throws NumberFormatException, ExceptionCriarEmpregado, ExceptionGetEmpregado {
+
+        String salary;
+        Employee NewEmployee;
+
+        switch (type) {
+            case "assalariado":
+                // verifica se o salario possue casas decimais separada e converte caso
+                // a divisão seja pela virgula.
+                salary = (employee.getSalario().contains(","))
+                        ? Conversor.converterInvertedCharacter(employee.getSalario())
+                        : employee.getSalario();
+                // cria um nono empregado e atualiza o registro
+                NewEmployee = new EmpregadoAssalariado(employee.getNome(),
+                        employee.getEndereco(), type, Float.parseFloat(salary));
+
+                break;
+            case "horista":
+                // verifica se o salario possue casas decimais separada e converte caso
+                // a divisão seja pela virgula.
+                salary = (employee.getSalario().contains(","))
+                        ? Conversor.converterInvertedCharacter(employee.getSalario())
+                        : employee.getSalario();
+                // cria um nono empregado e atualiza o registro
+                NewEmployee = new EmpregadoAssalariado(employee.getNome(),
+                        employee.getEndereco(), type, Float.parseFloat(salary));
+                break;
+            default:
+                throw new ExceptionGetEmpregado("Tipo invalido.");
+        }
+        EmployeeController.Empregados.put(employeeID, NewEmployee);
+    }
+
+    static public void converterEmployee(String employeeID, Employee employee, String type, String amount)
+            throws NumberFormatException, ExceptionCriarEmpregado, ExceptionGetEmpregado {
+
+        float amountAux;
+        String salary;
+        Employee NewEmployee;
+
+        switch (type) {
+
+            case "comissionado":
+                // verifica se o salario possue casas decimais separada e converte caso
+                // a divisão seja pela virgula.
+                salary = (employee.getSalario().contains(","))
+                        ? Conversor.converterInvertedCharacter(employee.getSalario())
+                        : employee.getSalario();
+                // verifica a existencia de virgula na comissão e troca pelo ponto
+                // para poder ocorrer a conversão para float
+                amount = (employee.getSalario().contains(","))
+                        ? Conversor.converterInvertedCharacter(amount)
+                        : amount;
+                // garante que nao ah letra na comissao
+                amountAux = conversorNumeric("comissao", amount);
+
+                if (amountAux <= 0) {
+                    throw new ExceptionCriarEmpregado("Comissao deve ser nao-negativa.");
+                }
+                // cria um nono empregado e atualiza o registro
+                NewEmployee = new EmpregadoComissionado(employee.getNome(),
+                        employee.getEndereco(), type, Float.parseFloat(salary), amountAux);
+                break;
+
+            case "horista":
+                // verifica se o salario possue casas decimais separada e converte caso
+                // a divisão seja pela virgula.
+                amount = (employee.getSalario().contains(","))
+                        ? Conversor.converterInvertedCharacter(amount)
+                        : amount;
+
+                // garante que não há letras no valor passado
+                amountAux = conversorNumeric("salario", amount);
+
+                if (amountAux <= 0) {
+                    throw new ExceptionCriarEmpregado("Salario deve ser nao-negativa.");
+                }
+
+                // cria um nono empregado e atualiza o registro
+                NewEmployee = new EmpregadoHorista(employee.getNome(),
+                        employee.getEndereco(), type, amountAux);
+                break;
+            default:
+                throw new ExceptionGetEmpregado("Tipo invalido.");
+        }
+
+        EmployeeController.Empregados.put(employeeID, NewEmployee);
+    }
+
+    public static float conversorNumeric(String attribut, String value) throws ExceptionGetEmpregado {
+        try {
+            return Float.parseFloat(value);
+        } catch (Exception e) {
+
+            switch (attribut) {
+                case "salario":
+                    throw new ExceptionGetEmpregado("Salario deve ser numerico.");
+                case "comissao":
+                    throw new ExceptionGetEmpregado("Comissao deve ser numerica.");
+                case "taxaSindical":
+                    throw new ExceptionGetEmpregado("Taxa sindical deve ser numerica.");
+                default:
+                    throw new ExceptionGetEmpregado("Valor deve ser numerica.");
+            }
+
+        }
+    }
+
 }

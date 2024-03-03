@@ -9,11 +9,12 @@ import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionRemoveEmpregado;
 import br.ufal.ic.p2.wepayu.middleware.RemoveInDatabase;
-import br.ufal.ic.p2.wepayu.models.EmpregadoHorista;
-import br.ufal.ic.p2.wepayu.models.Employee;
-import br.ufal.ic.p2.wepayu.models.EmpregadoAssalariado;
-import br.ufal.ic.p2.wepayu.models.EmpregadoComissionado;
+import br.ufal.ic.p2.wepayu.models.Employee.Employee;
+import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
+import br.ufal.ic.p2.wepayu.models.Employee.Hourly.EmpregadoHorista;
+import br.ufal.ic.p2.wepayu.models.Employee.Salaried.EmpregadoAssalariado;
 import br.ufal.ic.p2.wepayu.utils.Conversor;
+import br.ufal.ic.p2.wepayu.utils.MenuAttribut;
 import br.ufal.ic.p2.wepayu.utils.ValidatorEmployee;
 
 public class EmployeeController {
@@ -22,7 +23,7 @@ public class EmployeeController {
     public static HashMap<String, Employee> Empregados;
 
     public static String criarEmpregado(String nome, String endereco, String tipo, String salario)
-            throws ExceptionCriarEmpregado {
+            throws ExceptionCriarEmpregado, ExceptionGetEmpregado {
 
         // transforma o valor do salario para poder ser convertido ex.: chega 20,00
         // transforma em 20.00
@@ -33,6 +34,7 @@ public class EmployeeController {
 
         if (tipo.equals("horista")) {
             EmpregadoHorista empregado = new EmpregadoHorista(nome, endereco, tipo, Float.parseFloat(salario));
+
             return EmployeeController.AdicionarEmpregado(empregado);
 
         }
@@ -49,7 +51,7 @@ public class EmployeeController {
     }
 
     public static String criarEmpregado(String nome, String endereco, String tipo, String salario, String comissao)
-            throws ExceptionCriarEmpregado {
+            throws ExceptionCriarEmpregado, ExceptionGetEmpregado {
 
         // transforma o valor do salario para poder ser convertido ex.: chega 20,00
         // transforma em 20.00
@@ -87,49 +89,22 @@ public class EmployeeController {
         throw new ExceptionGetEmpregado("Nao ha empregado com esse nome.");
     }
 
-    public static String getAtributo(String emp, String atributo)
+    public static String getAtributo(String emp, String attribut)
 
             throws EmpregadoNaoExisteException, ExceptionGetEmpregado {
 
-        if (emp.isEmpty() || emp.equals("")) {
+        if (emp.isEmpty()) {
             throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
+        } else if (!EmployeeController.Empregados.containsKey(emp)) {
+            throw new EmpregadoNaoExisteException();
         }
 
-        else if (EmployeeController.Empregados.containsKey(emp) == false) {
-            throw new EmpregadoNaoExisteException();
-        } else if (EmployeeController.Empregados.get(emp) == null) {
-            throw new EmpregadoNaoExisteException();
-        }
-        String str;
         Employee empr;
+        // empr receberá empregado do hashmap
         empr = EmployeeController.Empregados.get(emp);
 
         // exibe o atributo buscado pelo usuário do empregado desejado
-        switch (atributo) {
-            case "nome":
-                return empr.getNome();
-
-            case "endereco":
-                return empr.getEndereco();
-
-            case "tipo":
-                return empr.getTipo();
-
-            case "sindicalizado":
-                return empr.getSindicalizado().toString();
-
-            case "salario":
-                str = empr.getSalario();
-                return Conversor.converterCharacter(str);
-
-            case "comissao":
-                EmpregadoComissionado empre = (EmpregadoComissionado) empr;
-                str = empre.getComissao();
-                return Conversor.converterCharacter(str);
-
-            default:
-                throw new ExceptionGetEmpregado("Atributo nao existe.");
-        }
+        return MenuAttribut.getValueAttribut(empr, attribut);
     }
 
     public static void removerEmpregado(String emp)
@@ -146,33 +121,76 @@ public class EmployeeController {
 
     }
 
-    public static String AdicionarEmpregado(Employee emp) {
+    public static String AdicionarEmpregado(Employee emp) throws ExceptionGetEmpregado {
         String id = Integer.toString(index);
 
         Empregados.put(id, emp);
+
+        PaymentController.MethodPayment(id, "emMaos");
+
         index++;
         return id;
 
     }
 
-    public static void setEmployee(String emp, String attribute, String value)
-            throws ExceptionGetEmpregado, EmpregadoNaoExisteException {
+    public static void setEmployee(String emp, String attribut, String value)
+            throws ExceptionGetEmpregado, EmpregadoNaoExisteException, NumberFormatException, ExceptionCriarEmpregado {
         if (emp.isEmpty()) {
-            throw new ExceptionGetEmpregado("Identificacao do membro nao pode ser nula.");
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
+        } else if (!EmployeeController.Empregados.containsKey(emp)) {
+            throw new ExceptionGetEmpregado("Empregado nao existe");
+        }
+        Employee employee = EmployeeController.Empregados.get(emp);
+
+        MenuAttribut.setValueAttribut(emp, employee, attribut, value);
+
+    }
+
+    // alteracao do empregadp para receber no banco
+    public static void setEmployee(String emp, String attribut, String value, String bank, String agency,
+            String accountNumber) throws ExceptionGetEmpregado {
+        if (emp.isEmpty()) {
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
+        } else if (!EmployeeController.Empregados.containsKey(emp)) {
+            throw new ExceptionGetEmpregado("Empregado nao existe.");
         }
 
-        switch (attribute) {
-            case "sindicalizado":
-                if (Empregados.containsKey(emp)) {
-                    Empregados.get(emp).setSindicalizado(Boolean.parseBoolean(value));
-                } else {
-                    throw new EmpregadoNaoExisteException();
-                }
-                break;
+        PaymentController.MethodPayment(emp, value, bank, agency, accountNumber);
 
-            default:
-                throw new ExceptionGetEmpregado("Atributo não existe");
-        }
+    }
+
+    public static void setEmployee(String emp, String attribut, String value, String commission)
+            throws ExceptionGetEmpregado, NumberFormatException, ExceptionCriarEmpregado, EmpregadoNaoExisteException {
+        if (emp.isEmpty())
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
+        if (attribut.isEmpty())
+            throw new ExceptionGetEmpregado("Atributo nao pode ser nulo.");
+        if (value.isEmpty())
+            throw new ExceptionGetEmpregado("Tipo nao pode ser nulo.");
+        if (!Empregados.containsKey(emp))
+            throw new EmpregadoNaoExisteException();
+
+        Employee employee = Empregados.get(emp);
+
+        MenuAttribut.setValueAttribut(emp, employee, attribut, value, commission);
+
+    }
+
+    // alteração do empregado sindicalizado
+    public static void setEmployee(String emp, String attribut, String value, String unionID, String unionFee)
+            throws ExceptionGetEmpregado, EmpregadoNaoExisteException, NumberFormatException, ExceptionCriarEmpregado {
+        if (emp.isEmpty())
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
+        if (attribut.isEmpty())
+            throw new ExceptionGetEmpregado("Atributo nao pode ser nulo.");
+        if (value.isEmpty())
+            throw new ExceptionGetEmpregado("Tipo nao pode ser nulo.");
+        if (!Empregados.containsKey(emp))
+            throw new EmpregadoNaoExisteException();
+
+        Employee employee = Empregados.get(emp);
+        // chama a função que vai verificar e alterar o empregado sindicalizado.
+        MenuAttribut.setValueAttribut(emp, employee, attribut, value, unionID, unionFee);
 
     }
 }

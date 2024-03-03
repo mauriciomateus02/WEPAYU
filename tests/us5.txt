@@ -35,7 +35,7 @@ expect 0,00 getTaxasServico emp=${id1} dataInicial=5/1/2005 dataFinal=1/2/2005
 expect 100,00 getTaxasServico emp=${id2} dataInicial=1/1/2005 dataFinal=31/12/2005
 
 # teste de erros
-expectError "Identificacao do membro nao pode ser nula." lancaTaxaServico membro="" data=1/1/2005 valor=80
+expectError "Identificacao do empregado nao pode ser nula." lancaTaxaServico membro="" data=1/1/2005 valor=80
 expectError "Membro nao existe." lancaTaxaServico membro=abc data=1/1/2005 valor=80
 expectError "Data invalida." lancaTaxaServico membro=s128 data=1/13/2005 valor=80
 expectError "Valor deve ser positivo." lancaTaxaServico membro=s128 data=1/12/2005 valor=0

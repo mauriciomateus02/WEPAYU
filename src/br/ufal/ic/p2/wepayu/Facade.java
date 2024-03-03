@@ -8,6 +8,7 @@ import br.ufal.ic.p2.wepayu.Exception.ExceptionRemoveEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.SaleAmountException;
 import br.ufal.ic.p2.wepayu.controller.CardController;
 import br.ufal.ic.p2.wepayu.controller.EmployeeController;
+import br.ufal.ic.p2.wepayu.controller.PaymentController;
 import br.ufal.ic.p2.wepayu.controller.SaleController;
 import br.ufal.ic.p2.wepayu.controller.UnionServiceController;
 import br.ufal.ic.p2.wepayu.middleware.UploadDatabase;
@@ -25,24 +26,32 @@ public class Facade {
     public Facade() throws FileNotFoundException {
         getDatabase.getDatabaseEntites(getEnumDatabase.Employee, EmployeeController.Empregados);
         getDatabase.getDatabaseEntites(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
-
+        getDatabase.getDatabaseEntites(getEnumDatabase.Payment, PaymentController.methodsPayment);
     }
 
     public void zerarSistema() {
         EmployeeController.Empregados = new HashMap<>();
         UnionServiceController.employeesUnionzed = new HashMap<>();
         CardController.CartaoPontos = new HashMap<>();
+        PaymentController.methodsPayment = new HashMap<>();
+    }
+
+    public void encerrarSistema() throws ExceptionCriarEmpregado, EmpregadoNaoExisteException {
+        // faz o upload dos empregados criados
+        UploadDatabase.uploadData(getEnumDatabase.Employee, EmployeeController.Empregados);
+        UploadDatabase.uploadData(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
+        UploadDatabase.uploadData(getEnumDatabase.Payment, PaymentController.methodsPayment);
     }
 
     public String criarEmpregado(String nome, String endereco, String tipo, String salario)
-            throws ExceptionCriarEmpregado {
+            throws ExceptionCriarEmpregado, ExceptionGetEmpregado {
 
         return EmployeeController.criarEmpregado(nome, endereco, tipo, salario);
 
     }
 
     public String criarEmpregado(String nome, String endereco, String tipo, String salario, String comissao)
-            throws ExceptionCriarEmpregado {
+            throws ExceptionCriarEmpregado, ExceptionGetEmpregado {
 
         return EmployeeController.criarEmpregado(nome, endereco, tipo, salario, comissao);
 
@@ -60,12 +69,6 @@ public class Facade {
         // posição dele
         // está e n-1 sendo n o indice buscado
         return EmployeeController.getEmpregadoPorNome(nome, indice - 1);
-    }
-
-    public void encerrarSistema() throws ExceptionCriarEmpregado, EmpregadoNaoExisteException {
-        // faz o upload dos empregados criados
-        UploadDatabase.uploadData(getEnumDatabase.Employee, EmployeeController.Empregados);
-        UploadDatabase.uploadData(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
     }
 
     public void removerEmpregado(String emp)
@@ -101,31 +104,41 @@ public class Facade {
         return SaleController.sumOfSalesAmount(emp, dateInitial, deadline);
     }
 
-    public void alteraEmpregado(String emp, String attribute, String value, String unionizedID, String unionFee)
-            throws ExceptionGetEmpregado, EmpregadoNaoExisteException {
+    public void alteraEmpregado(String emp, String attribut, String value, String unionizedID, String unionFee)
+            throws ExceptionGetEmpregado, EmpregadoNaoExisteException, NumberFormatException, ExceptionCriarEmpregado {
 
         if (emp.isEmpty()) {
-            throw new ExceptionGetEmpregado("Identificacao do membro nao pode ser nula.");
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
         } else if (!EmployeeController.Empregados.containsKey(emp)) {
             throw new EmpregadoNaoExisteException();
         }
 
-        EmployeeController.setEmployee(emp, attribute, value);
-
-        UnionServiceController.createEmployeeUnionzed(emp, unionizedID, unionFee);
+        EmployeeController.setEmployee(emp, attribut, value, unionizedID, unionFee);
 
     }
 
-    public void alteraEmpregado(String emp, String attribute, String value)
-            throws ExceptionGetEmpregado, EmpregadoNaoExisteException {
+    public void alteraEmpregado(String emp, String attribut, String value)
+            throws ExceptionGetEmpregado, EmpregadoNaoExisteException, NumberFormatException, ExceptionCriarEmpregado {
         if (emp.isEmpty()) {
-            throw new ExceptionGetEmpregado("Identificacao do membro nao pode ser nula.");
+            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
         } else if (!EmployeeController.Empregados.containsKey(emp)) {
             throw new EmpregadoNaoExisteException();
         }
 
-        EmployeeController.setEmployee(emp, attribute, value);
+        EmployeeController.setEmployee(emp, attribut, value);
 
+    }
+
+    public void alteraEmpregado(String emp, String attribut, String value, String bank, String agency,
+            String accountNumber) throws ExceptionGetEmpregado {
+
+        EmployeeController.setEmployee(emp, attribut, value, bank, agency, accountNumber);
+
+    }
+
+    public void alteraEmpregado(String emp, String attribut, String value, String commission)
+            throws NumberFormatException, ExceptionGetEmpregado, ExceptionCriarEmpregado, EmpregadoNaoExisteException {
+        EmployeeController.setEmployee(emp, attribut, value, commission);
     }
 
     public String getTaxasServico(String emp, String dateInitial, String deadline)

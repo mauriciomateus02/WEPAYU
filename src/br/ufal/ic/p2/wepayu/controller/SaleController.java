@@ -1,13 +1,12 @@
 package br.ufal.ic.p2.wepayu.controller;
 
-import br.ufal.ic.p2.wepayu.models.EmpregadoComissionado;
-import br.ufal.ic.p2.wepayu.models.Sale;
-
 import java.time.LocalDate;
 
 import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.SaleAmountException;
+import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
+import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.Sale;
 import br.ufal.ic.p2.wepayu.utils.Conversor;
 import br.ufal.ic.p2.wepayu.utils.Validator;
 import br.ufal.ic.p2.wepayu.utils.ValidatorEmployee;

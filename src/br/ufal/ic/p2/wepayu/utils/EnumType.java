@@ -17,6 +17,8 @@ public class EnumType {
     public enum getEnumDatabase {
         Employee,
         Unionized,
+        Payment,
         Default
     }
+
 }
