@@ -1,1 +1,1 @@
-1;Joao da Silva;Rua dos Jooes, 333 - Campina Grande;comissionado;false;23,00;0,02->[]
+1;Joao da Silva;Rua dos Jooes, 333 - Campina Grande;comissionado;false;23.00;0.02->[]

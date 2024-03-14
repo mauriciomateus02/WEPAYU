@@ -1,6 +1,6 @@
 package br.ufal.ic.p2.wepayu.models.Employee.Commissioned;
 
-import br.ufal.ic.p2.wepayu.utils.Conversor;
+import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 
 public class Sale {
     private String date;

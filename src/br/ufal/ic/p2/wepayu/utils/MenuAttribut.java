@@ -2,11 +2,12 @@ package br.ufal.ic.p2.wepayu.utils;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
-import br.ufal.ic.p2.wepayu.controller.PaymentController;
-import br.ufal.ic.p2.wepayu.controller.UnionServiceController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
 import br.ufal.ic.p2.wepayu.models.Employee.Employee;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.Payment.PaymentInBank;
+import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 
 public class MenuAttribut {
     public static String getValueAttribut(Employee emp, String attribut) throws ExceptionGetEmpregado {
@@ -85,8 +86,12 @@ public class MenuAttribut {
         switch (attribut) {
             case "sindicalizado":
                 // verifica se o empregado já é sindicalizado, caso contrario altera
-                UnionServiceController.setUnionized(emp, unionID, unionfee);
-                employee.setSindicalizado(Boolean.parseBoolean(valueAttribut));
+                if (employee.getSindicalizado()) {
+                    UnionServiceController.setUnionized(emp, unionID, unionfee);
+                } else {
+                    UnionServiceController.createEmployeeUnionzed(emp, unionID, unionfee);
+                    employee.setSindicalizado(Boolean.parseBoolean(valueAttribut));
+                }
                 break;
             default:
                 throw new ExceptionGetEmpregado("Atributo nao existe.");
@@ -104,6 +109,7 @@ public class MenuAttribut {
                 if (value.equals("true") || value.equals("false")) {
 
                     emp.setSindicalizado(Boolean.parseBoolean(value));
+
                 } else
                     throw new ExceptionGetEmpregado("Valor deve ser true ou false.");
                 break;

@@ -1,9 +1,9 @@
-package br.ufal.ic.p2.wepayu.middleware;
+package br.ufal.ic.p2.wepayu.middleware.serviceDatabese;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
-import br.ufal.ic.p2.wepayu.controller.EmployeeController;
-import br.ufal.ic.p2.wepayu.controller.PaymentController;
-import br.ufal.ic.p2.wepayu.controller.UnionServiceController;
+import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.Sale;
 import br.ufal.ic.p2.wepayu.models.Employee.Hourly.CartaoPontos;
@@ -18,7 +18,8 @@ import br.ufal.ic.p2.wepayu.models.Unionized.Unionized;
 
 public class DataRetriever {
 
-    public static void setEmployee(String index, String name, String address, String type, String unionized,
+    protected static void setEmployee(String index, String name, String address,
+            String type, String unionized,
             float salary, String[] list) throws ExceptionCriarEmpregado {
 
         if (type.equals("horista")) {
@@ -35,7 +36,6 @@ public class DataRetriever {
 
                 emp.addCartaoPontos(card);
             }
-
             EmployeeController.Empregados.put(index, emp);
 
         }
@@ -47,7 +47,8 @@ public class DataRetriever {
 
     }
 
-    public static void setEmployee(String index, String name, String address, String type, String unionized,
+    protected static void setEmployee(String index, String name, String address,
+            String type, String unionized,
             float salary) throws ExceptionCriarEmpregado {
 
         if (type.equals("horista")) {
@@ -57,11 +58,11 @@ public class DataRetriever {
             emp.setSindicalizado(Boolean.parseBoolean(unionized));
 
             EmployeeController.Empregados.put(index, emp);
+
         } else if (type.equals("assalariado")) {
             EmpregadoAssalariado emp = new EmpregadoAssalariado(name, address, type, salary);
 
             emp.setSindicalizado(Boolean.parseBoolean(unionized));
-
             EmployeeController.Empregados.put(index, emp);
         }
 
@@ -72,8 +73,9 @@ public class DataRetriever {
         }
     }
 
-    public static void setEmployee(String index, String name, String address, String type, String unionized,
-            float salary, float commission, String[] list) throws ExceptionCriarEmpregado {
+    protected static void setEmployee(String index, String name, String address,
+            String type, String unionized, float salary, float commission, String[] list)
+            throws ExceptionCriarEmpregado {
 
         if (type.equals("comissionado")) {
             // recria o funcionario horista
@@ -102,7 +104,8 @@ public class DataRetriever {
         }
     }
 
-    public static void setEmployee(String index, String name, String address, String type, String unionized,
+    protected static void setEmployee(String index, String name, String address,
+            String type, String unionized,
             float salary, float commission) throws ExceptionCriarEmpregado {
 
         if (type.equals("comissionado")) {
@@ -119,7 +122,7 @@ public class DataRetriever {
         }
     }
 
-    public static void setUnionized(String index, String employeeID, String unionFee, String[] listService) {
+    protected static void setUnionized(String index, String employeeID, String unionFee, String[] listService) {
         // cria um objeto do tipo sindicato
         Unionized union = new Unionized(index, employeeID, Float.parseFloat(unionFee));
 
@@ -132,11 +135,19 @@ public class DataRetriever {
 
         }
 
-        UnionServiceController.addUnionized(union, index);
-        EmployeeController.Empregados.get(employeeID).setUnionized(union);
+        UnionServiceController.addUnionized(index, union);
+
     }
 
-    public static void setPayment(String employeeID, String method) {
+    protected static void setUnionized(String index, String employeeID, String unionFee) {
+
+        Unionized union = new Unionized(index, employeeID, Float.parseFloat(unionFee));
+
+        UnionServiceController.addUnionized(index, union);
+
+    }
+
+    protected static void setPayment(String employeeID, String method) {
         if (method.equals("emMaos")) {
             Payment payment = new PaymentInHands(employeeID, method);
             // vincula o pagamento ao empregado
@@ -152,7 +163,7 @@ public class DataRetriever {
         }
     }
 
-    public static void setPayment(String employeeID, String name, String bank, String agency, String accountNumber) {
+    protected static void setPayment(String employeeID, String name, String bank, String agency, String accountNumber) {
         // cria metodo do tipo pagamento em banco
         Payment payment = new PaymentInBank(employeeID, name, bank, agency, accountNumber);
         // vincula ao cliente

@@ -1,9 +1,10 @@
-package br.ufal.ic.p2.wepayu.utils;
+package br.ufal.ic.p2.wepayu.utils.Validator;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
+import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumActiveTurn;
 
 public class Validator {
@@ -12,21 +13,27 @@ public class Validator {
 
         String[] formato = { "d/M/yyyy", "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy" };
         int cont = 0;
-
-        String[] str = data.split("/");
+        String[] str;
+        String day;
+        LocalDate dataParsed = null;
 
         if (data.isEmpty()) {
             // se a data vier vazia lança o erro
             throw new DateInvalideException("Data nao pode ser nula.");
         }
+
+        str = data.split("/");
+        day = str[0];
+
         for (String fromatter : formato) {
             try {
                 // System.out.println(fromatter);
                 // define o formato da data
                 DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(fromatter);
                 // converte a data para o formato desejado
-                LocalDate dataParsed = LocalDate.parse(data, dateFormatter);
-                if (Integer.parseInt(str[0]) > dataParsed.lengthOfMonth()) {
+                dataParsed = LocalDate.parse(data, dateFormatter);
+
+                if (Integer.parseInt(day) > dataParsed.lengthOfMonth()) {
 
                     switch (tipo) {
                         case InitialDate:
@@ -38,31 +45,29 @@ public class Validator {
                         default:
                             break;
                     }
-                }
-                break;
+                } else
+                    break;
             } catch (Exception e) {
                 cont++;
             }
         }
 
-        switch (tipo) {
-            case InitialDate:
-                if (cont == 4)
+        if (cont == 4) {
+
+            switch (tipo) {
+                case InitialDate:
                     // se ocorrer erro na conversão lança o erro data invalida.
                     throw new DateInvalideException("Data inicial invalida.");
-                break;
-            case DeadLine:
-                if (cont == 4)
+                case DeadLine:
                     // se ocorrer erro na conversão lança o erro data invalida.
                     throw new DateInvalideException("Data final invalida.");
-                break;
-            case Default:
-                if (cont == 4)
+
+                case Default:
                     // se ocorrer erro na conversão lança o erro data invalida.
                     throw new DateInvalideException("Data invalida.");
-                break;
-            default:
-                break;
+                default:
+                    break;
+            }
         }
 
     }
@@ -70,10 +75,9 @@ public class Validator {
     public static void validatorHours(String hours) throws DateInvalideException {
 
         try {
-
             if (hours.isEmpty()) {
                 // se a hora vier vazia lança o erro
-                new DateInvalideException("Horas não devem ser nulas");
+                throw new DateInvalideException("Horas não devem ser nulas");
             }
             // se a hora conter "," signfica que ela é um numero com casa decimal
             if (hours.contains(",")) {
@@ -83,7 +87,7 @@ public class Validator {
                 // se o valor for menor ou igual a 0
                 if (horas <= 0) {
                     // lança o erro
-                    new DateInvalideException("Horas devem ser positivas.");
+                    throw new DateInvalideException("Horas devem ser positivas.");
                 }
 
             }
@@ -93,8 +97,9 @@ public class Validator {
                 float horas = Float.parseFloat(hours);
                 // analisado se é memnor ou igual a 0
                 if (horas <= 0) {
+
                     // se sim, lança o erro.
-                    new DateInvalideException("Horas devem ser positivas.");
+                    throw new DateInvalideException("Horas devem ser positivas.");
                 }
             }
 
@@ -121,6 +126,7 @@ public class Validator {
     }
 
     public static void validateSearchDate(String dateInitial, String deadline) throws DateInvalideException {
+
         Validator.validatorDate(dateInitial, getEnumActiveTurn.InitialDate);
         Validator.validatorDate(deadline, getEnumActiveTurn.DeadLine);
 
@@ -131,10 +137,10 @@ public class Validator {
         dateFinal = Conversor.converterDate(deadline, 2);
 
         // verifica se a data inicial é maior que a data final
-        if (startDate.getDayOfMonth() > dateFinal.getDayOfMonth()
-                && startDate.getMonthValue() >= dateFinal.getMonthValue()) {
+        if (startDate.getDayOfYear() > dateFinal.getDayOfYear()
+                && startDate.getYear() >= dateFinal.getYear()) {
             throw new DateInvalideException("Data inicial nao pode ser posterior a data final.");
-        } else if (startDate.getDayOfMonth() < dateFinal.getDayOfMonth()
+        } else if (startDate.getDayOfYear() < dateFinal.getDayOfYear()
                 && startDate.getMonthValue() > dateFinal.getMonthValue()) {
             throw new DateInvalideException("Data inicial nao pode ser posterior a data final.");
         }

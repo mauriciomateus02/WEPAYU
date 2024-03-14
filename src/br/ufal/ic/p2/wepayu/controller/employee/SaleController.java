@@ -1,4 +1,4 @@
-package br.ufal.ic.p2.wepayu.controller;
+package br.ufal.ic.p2.wepayu.controller.employee;
 
 import java.time.LocalDate;
 
@@ -7,12 +7,12 @@ import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.SaleAmountException;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.Sale;
-import br.ufal.ic.p2.wepayu.utils.Conversor;
-import br.ufal.ic.p2.wepayu.utils.Validator;
-import br.ufal.ic.p2.wepayu.utils.ValidatorEmployee;
-import br.ufal.ic.p2.wepayu.utils.ValidatorSale;
+import br.ufal.ic.p2.wepayu.utils.Validator.Validator;
+import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 import br.ufal.ic.p2.wepayu.utils.EnumType.EnumContract;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumActiveTurn;
+import br.ufal.ic.p2.wepayu.utils.Validator.ValidatorEmployee;
+import br.ufal.ic.p2.wepayu.utils.Validator.ValidatorSale;
 
 public class SaleController {
 

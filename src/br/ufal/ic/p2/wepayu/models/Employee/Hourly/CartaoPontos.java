@@ -12,9 +12,9 @@ public class CartaoPontos {
 
     }
 
-    public String gethoras() {
+    public float gethoras() {
 
-        return Float.toString(horas);
+        return horas;
     }
 
     public String getData() {

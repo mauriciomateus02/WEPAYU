@@ -1,4 +1,4 @@
-package br.ufal.ic.p2.wepayu.middleware;
+package br.ufal.ic.p2.wepayu.middleware.serviceDatabese;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,28 +8,12 @@ import java.util.Map;
 
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
-import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
 
-public class UploadDatabase {
+public class PushFiles {
 
-    private static String outputFile = null;
-
-    public static <T> void uploadData(getEnumDatabase EnumDatabase, HashMap<String, T> map)
+    public static <T> void uploadData(String outputFile, HashMap<String, T> map)
             throws EmpregadoNaoExisteException, ExceptionCriarEmpregado {
 
-        switch (EnumDatabase) {
-            case Employee:
-                outputFile = "database/Employee.txt";
-                break;
-            case Unionized:
-                outputFile = "database/Unionized.txt";
-                break;
-            case Payment:
-                outputFile = "database/Payment.txt";
-                break;
-            default:
-                break;
-        }
         File file = new File(outputFile);
         BufferedWriter bf = null;
 

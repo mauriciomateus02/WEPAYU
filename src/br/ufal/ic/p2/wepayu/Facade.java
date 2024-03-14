@@ -6,41 +6,40 @@ import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionRemoveEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.SaleAmountException;
-import br.ufal.ic.p2.wepayu.controller.CardController;
-import br.ufal.ic.p2.wepayu.controller.EmployeeController;
-import br.ufal.ic.p2.wepayu.controller.PaymentController;
-import br.ufal.ic.p2.wepayu.controller.SaleController;
-import br.ufal.ic.p2.wepayu.controller.UnionServiceController;
-import br.ufal.ic.p2.wepayu.middleware.UploadDatabase;
-import br.ufal.ic.p2.wepayu.middleware.getDatabase;
+import br.ufal.ic.p2.wepayu.controller.employee.CardController;
+import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
+import br.ufal.ic.p2.wepayu.controller.employee.SaleController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.PayrollController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
+import br.ufal.ic.p2.wepayu.middleware.DBHandler;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
 
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.zip.DataFormatException;
 
 public class Facade {
 
-    UploadDatabase uplEmp;
-
     public Facade() throws FileNotFoundException {
-        getDatabase.getDatabaseEntites(getEnumDatabase.Employee, EmployeeController.Empregados);
-        getDatabase.getDatabaseEntites(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
-        getDatabase.getDatabaseEntites(getEnumDatabase.Payment, PaymentController.methodsPayment);
+        DBHandler.getData(getEnumDatabase.Employee);
+        DBHandler.getData(getEnumDatabase.Unionized);
+        DBHandler.getData(getEnumDatabase.Payment);
+
     }
 
-    public void zerarSistema() {
-        EmployeeController.Empregados = new HashMap<>();
-        UnionServiceController.employeesUnionzed = new HashMap<>();
-        CardController.CartaoPontos = new HashMap<>();
-        PaymentController.methodsPayment = new HashMap<>();
+    public void zerarSistema() throws FileNotFoundException {
+
+        DBHandler.resetData(getEnumDatabase.Employee);
+        DBHandler.resetData(getEnumDatabase.Unionized);
+        DBHandler.resetData(getEnumDatabase.Payment);
     }
 
     public void encerrarSistema() throws ExceptionCriarEmpregado, EmpregadoNaoExisteException {
         // faz o upload dos empregados criados
-        UploadDatabase.uploadData(getEnumDatabase.Employee, EmployeeController.Empregados);
-        UploadDatabase.uploadData(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
-        UploadDatabase.uploadData(getEnumDatabase.Payment, PaymentController.methodsPayment);
+
+        DBHandler.uploadData(getEnumDatabase.Employee, EmployeeController.Empregados);
+        DBHandler.uploadData(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
+        DBHandler.uploadData(getEnumDatabase.Payment, PaymentController.methodsPayment);
     }
 
     public String criarEmpregado(String nome, String endereco, String tipo, String salario)
@@ -151,4 +150,8 @@ public class Facade {
         UnionServiceController.createServiceFee(unionizedID, date, value);
     }
 
+    public String totalFolha(String date)
+            throws ExceptionGetEmpregado, DateInvalideException, DataFormatException, EmpregadoNaoExisteException {
+        return PayrollController.totalPayroll(date);
+    }
 }
