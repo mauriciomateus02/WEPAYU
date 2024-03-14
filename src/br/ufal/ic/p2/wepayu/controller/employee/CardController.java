@@ -1,8 +1,6 @@
-package br.ufal.ic.p2.wepayu.controller;
+package br.ufal.ic.p2.wepayu.controller.employee;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.zip.DataFormatException;
 
 import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
@@ -10,13 +8,11 @@ import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.models.Employee.Hourly.CartaoPontos;
 import br.ufal.ic.p2.wepayu.models.Employee.Hourly.EmpregadoHorista;
-import br.ufal.ic.p2.wepayu.utils.Conversor;
-import br.ufal.ic.p2.wepayu.utils.Validator;
-import br.ufal.ic.p2.wepayu.utils.ValidatorCartaoPontos;
+import br.ufal.ic.p2.wepayu.utils.Validator.Validator;
+import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
+import br.ufal.ic.p2.wepayu.utils.Validator.ValidatorCartaoPontos;
 
 public class CardController {
-
-    public static HashMap<String, ArrayList<CartaoPontos>> CartaoPontos;
 
     public static void lancaCartao(String emp, String data, String hora)
             throws EmpregadoNaoExisteException, DataFormatException, DateInvalideException, ExceptionGetEmpregado {
@@ -39,30 +35,16 @@ public class CardController {
         }
 
         EmployeeController.Empregados.put(emp, empregado);
-
-        // // verifica a existenca se o empregado já tem suas horas cadastradas.
-        // if (CartaoPontos.containsKey(emp)) {
-        // hora = Conversor.converterInvertedCharacter(hora);
-        // CartaoPontos card = new CartaoPontos(data, Float.parseFloat(hora));
-        // CartaoPontos.get(emp).add(card);
-        // }
-        // // caso o empregado não tenha horas cadastradas é realizado o cadastro das
-        // // horas.
-        // else {
-        // hora = Conversor.converterInvertedCharacter(hora);
-        // CartaoPontos card = new CartaoPontos(data, Float.parseFloat(hora));
-        // ArrayList<CartaoPontos> cards = new ArrayList<>();
-        // cards.add(card);
-        // CartaoPontos.put(emp, cards);
-        // }
     }
 
     public static String getHoras(String emp, String tipoHora, String dataInicio, String dataFinal)
             throws ExceptionGetEmpregado, DataFormatException, DateInvalideException, EmpregadoNaoExisteException {
-        if (emp.isEmpty() || emp.equals("")) {
+
+        if (emp.isEmpty()) {
             throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
         }
         // verifica a existencia de erros
+
         Validator.validateSearchDate(dataInicio, dataFinal);
 
         if (EmployeeController.Empregados.containsKey(emp)) {
@@ -81,14 +63,13 @@ public class CardController {
 
                 else {
 
-                    float value = 0;
-                    LocalDate deadline = null, dateVerific = null;
+                    float value = 0, extra = 0;
+                    LocalDate deadline = null, dateVerific = null, startDate = null;
+                    String valueConvertido;
 
                     // converte a string em data para ser analisada.
                     deadline = Conversor.converterDate(dataFinal, 2);
-
-                    // converte a data inicial
-                    String[] dateSplit = dataInicio.split("/");
+                    startDate = Conversor.converterDate(dataInicio, 1);
 
                     for (CartaoPontos card : empregado.getCartaoPontos()) {
 
@@ -96,40 +77,34 @@ public class CardController {
 
                         dateVerific = Conversor.converterDate(card.getData(), 3);
 
-                        // verifica se a data que está sendo verificada é menor que a ultima analisada.
-                        if (dateVerific.getDayOfMonth() >= Integer.parseInt(dateSplit[0])
-                                && dateVerific.getDayOfMonth() < deadline.getDayOfMonth()
-                                && dateVerific.getMonthValue() <= deadline.getMonthValue()
-                                && tipoHora.equals("normal")) {
+                        // condição diz que se a data verificada for maior ou igual a data de inicio
+                        // e a data verificada estiver no range de data inicio e data final
+                        if (dateVerific.getDayOfYear() >= startDate.getDayOfYear()
+                                && dateVerific.getYear() == startDate.getYear()
+                                && dateVerific.getDayOfYear() < deadline.getDayOfYear()
+                                && dateVerific.getYear() == deadline.getYear()) {
 
-                            // caso exista horas maior que 8 ele só guarda 8 o resto será contabilizado na
-                            // hora extra
-                            if (Float.parseFloat(card.gethoras()) > 8) {
-
+                            if (card.gethoras() >= 8) {
                                 value += 8;
+                                extra += (card.gethoras() - 8);
                             } else {
-                                // caso não exista ele guarda mesmo assim para contabilizar as horas trabalhadas
-                                value += Float.parseFloat(card.gethoras());
-                            }
-                        }
-
-                        else if (dateVerific.getDayOfMonth() < deadline.getDayOfMonth()
-                                && dateVerific.getMonthValue() <= deadline.getMonthValue()
-                                && tipoHora.equals("extra")) {
-                            float temp = Float.parseFloat(card.gethoras());
-                            if (temp > 8) {
-                                // caso exista hora maior que 8 ele guada a diferença
-                                value += temp - 8;
-                            } else {
-                                // caso exista hora menor ele retira das horas extra
-                                value -= (8 - temp);
+                                value += card.gethoras();
                             }
                         }
 
                     }
 
+                    // verifica se existe hora extra, caso contrario
+
+                    extra = (extra < 0) ? 0 : extra;
+
                     // após a contagem das horas o valor é convertido
-                    String valueConvertido = Conversor.converterCharacter(Float.toString(value));
+                    if (tipoHora.equals("normal")) {
+
+                        valueConvertido = Conversor.converterCharacter(Float.toString(value));
+                    } else {
+                        valueConvertido = Conversor.converterCharacter(Float.toString(extra));
+                    }
                     // se o valor conter ,0 significa que é um valor inteiro e será dividido
                     if (valueConvertido.contains(",0")) {
                         // divide na virgula

@@ -1,6 +1,7 @@
-package br.ufal.ic.p2.wepayu.utils;
+package br.ufal.ic.p2.wepayu.utils.Validator;
 
 import br.ufal.ic.p2.wepayu.Exception.SaleAmountException;
+import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 
 public class ValidatorSale {
 

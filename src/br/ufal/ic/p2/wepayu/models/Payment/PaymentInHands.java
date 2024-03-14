@@ -13,7 +13,7 @@ public class PaymentInHands extends Payment {
 
     @Override
     public String toString() {
-        return getEmployeeID() + ";" + getName() + "->[]";
+        return getEmployeeID() + ";" + getName();
     }
 
 }

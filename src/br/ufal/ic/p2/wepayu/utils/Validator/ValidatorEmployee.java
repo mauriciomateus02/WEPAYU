@@ -1,8 +1,8 @@
-package br.ufal.ic.p2.wepayu.utils;
+package br.ufal.ic.p2.wepayu.utils.Validator;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
-import br.ufal.ic.p2.wepayu.controller.EmployeeController;
+import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.utils.EnumType.EnumContract;
 
 public class ValidatorEmployee {

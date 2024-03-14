@@ -1,4 +1,4 @@
-package br.ufal.ic.p2.wepayu.controller;
+package br.ufal.ic.p2.wepayu.controller.humanResources;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -6,10 +6,11 @@ import java.util.HashMap;
 import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
+import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.models.Unionized.ServiceFee;
 import br.ufal.ic.p2.wepayu.models.Unionized.Unionized;
-import br.ufal.ic.p2.wepayu.utils.Conversor;
-import br.ufal.ic.p2.wepayu.utils.Validator;
+import br.ufal.ic.p2.wepayu.utils.Validator.Validator;
+import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumActiveTurn;
 
 public class UnionServiceController {
@@ -22,34 +23,31 @@ public class UnionServiceController {
         if (employee.isEmpty()) {
             throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
         }
-        if (employeesUnionzed.containsKey(unionID)) {
-            throw new ExceptionGetEmpregado("Ha outro empregado com esta identificacao de sindicato");
-        }
         if (unionID.isEmpty()) {
             throw new ExceptionGetEmpregado("Identificacao do sindicato nao pode ser nula.");
         }
-        if (unionfee.isBlank()) {
+        if (unionfee.isEmpty()) {
             throw new ExceptionGetEmpregado("Taxa sindical nao pode ser nula.");
         }
+        // verifica se a txa contém virgula e se tiver troca pelo ponto
+        // para poder converter o valor em float
 
-        try {
+        float valueUnionFee = Conversor.conversorNumeric("taxaSindical", unionfee);
 
-            float valueUnionFee;
-            // verifica se a txa contém virgula e se tiver troca pelo ponto
-            // para poder converter o valor em float
-            valueUnionFee = (unionfee.contains(",")) ? Float.parseFloat(Conversor.converterInvertedCharacter(unionfee))
-                    : Float.parseFloat(unionfee);
-
-            Unionized union = new Unionized(unionID, employee, valueUnionFee);
-
-            employeesUnionzed.put(unionID, union);
-
-            // associa o empregado ao sindicato
-            EmployeeController.Empregados.get(employee).setUnionized(union);
-
-        } catch (Exception e) {
-            throw new ExceptionGetEmpregado("Taxa sindical deve ser numerica.");
+        if (valueUnionFee <= 0) {
+            throw new ExceptionGetEmpregado("Taxa sindical deve ser nao-negativa.");
         }
+        if (employeesUnionzed.containsKey(unionID)) {
+            throw new ExceptionGetEmpregado("Ha outro empregado com esta identificacao de sindicato");
+        }
+
+        Unionized union = new Unionized(unionID, employee, valueUnionFee);
+
+        employeesUnionzed.put(unionID, union);
+
+        // associa o empregado ao sindicato
+        EmployeeController.Empregados.get(employee).setUnionized(union);
+
     }
 
     public static boolean verificateEmployeeUnionzed(String unionID) {
@@ -131,7 +129,8 @@ public class UnionServiceController {
         return Conversor.converterCharacter(String.format("%.2f", value));
     }
 
-    public static void addUnionized(Unionized union, String unionizedID) {
+    public static void addUnionized(String unionizedID, Unionized union) {
+        EmployeeController.Empregados.get(union.getEmployeeID()).setUnionized(union);
         employeesUnionzed.put(unionizedID, union);
     }
 
@@ -142,9 +141,12 @@ public class UnionServiceController {
         if (unionID.isEmpty()) {
             throw new ExceptionGetEmpregado("Identificacao do sindicato nao pode ser nula.");
         }
-        if (unionFee.isBlank()) {
+        if (unionFee.isEmpty()) {
             throw new ExceptionGetEmpregado("Taxa sindical nao pode ser nula.");
         }
+
+        if (unionFee.contains(","))
+            unionFee = Conversor.converterInvertedCharacter(unionFee);
 
         float auxFee = Conversor.conversorNumeric("taxaSindical", unionFee);
 

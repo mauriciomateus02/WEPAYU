@@ -45,7 +45,7 @@ public class PaymentInBank extends Payment {
     @Override
     public String toString() {
         return getEmployeeID() + ";" + getName() + ";" + getBank() + ";" + getAgency() + ";"
-                + getAccountNumber() + "->[]";
+                + getAccountNumber();
     }
 
 }

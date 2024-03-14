@@ -1,4 +1,4 @@
-package br.ufal.ic.p2.wepayu.middleware;
+package br.ufal.ic.p2.wepayu.middleware.serviceDatabese;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,11 +8,11 @@ import java.io.FileNotFoundException;
 
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 
-public class RemoveInDatabase {
-    public static void removeEmpregado(String emp) throws EmpregadoNaoExisteException, FileNotFoundException {
+public class removeLine {
+    public static void removeEntities(String file, String key)
+            throws EmpregadoNaoExisteException, FileNotFoundException {
 
         try {
-            String file = "database/Employee.txt";
             String linha;
             BufferedReader bf = new BufferedReader(new FileReader(file));
             StringBuilder sBuilder = new StringBuilder();
@@ -22,7 +22,7 @@ public class RemoveInDatabase {
 
                 String obj[] = linha.split(";");
 
-                if (!obj[0].equals(emp)) {
+                if (!obj[0].equals(key)) {
                     // analisa e aqueles que não forem o que queremos excluir guarda no sbuilder
                     sBuilder.append(linha);
                     sBuilder.append(System.lineSeparator());

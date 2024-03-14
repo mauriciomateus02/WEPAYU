@@ -1,8 +1,9 @@
-package br.ufal.ic.p2.wepayu.controller;
+package br.ufal.ic.p2.wepayu.controller.humanResources;
 
 import java.util.HashMap;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
+import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.models.Payment.Payment;
 import br.ufal.ic.p2.wepayu.models.Payment.PaymentInBank;
 import br.ufal.ic.p2.wepayu.models.Payment.PaymentInHands;

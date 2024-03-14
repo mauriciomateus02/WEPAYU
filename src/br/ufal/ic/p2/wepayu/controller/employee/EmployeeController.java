@@ -1,4 +1,4 @@
-package br.ufal.ic.p2.wepayu.controller;
+package br.ufal.ic.p2.wepayu.controller.employee;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -8,14 +8,16 @@ import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionRemoveEmpregado;
-import br.ufal.ic.p2.wepayu.middleware.RemoveInDatabase;
+import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
+import br.ufal.ic.p2.wepayu.middleware.DBHandler;
 import br.ufal.ic.p2.wepayu.models.Employee.Employee;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.Employee.Hourly.EmpregadoHorista;
 import br.ufal.ic.p2.wepayu.models.Employee.Salaried.EmpregadoAssalariado;
-import br.ufal.ic.p2.wepayu.utils.Conversor;
 import br.ufal.ic.p2.wepayu.utils.MenuAttribut;
-import br.ufal.ic.p2.wepayu.utils.ValidatorEmployee;
+import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
+import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
+import br.ufal.ic.p2.wepayu.utils.Validator.ValidatorEmployee;
 
 public class EmployeeController {
 
@@ -35,14 +37,14 @@ public class EmployeeController {
         if (tipo.equals("horista")) {
             EmpregadoHorista empregado = new EmpregadoHorista(nome, endereco, tipo, Float.parseFloat(salario));
 
-            return EmployeeController.AdicionarEmpregado(empregado);
+            return EmployeeController.addEmployee(empregado);
 
         }
 
         else if (tipo.equals("assalariado")) {
             EmpregadoAssalariado empregadoAssalariado = new EmpregadoAssalariado(nome, endereco, tipo,
                     Float.parseFloat(salario));
-            return EmployeeController.AdicionarEmpregado(empregadoAssalariado);
+            return EmployeeController.addEmployee(empregadoAssalariado);
         }
 
         else {
@@ -68,7 +70,7 @@ public class EmployeeController {
             // cria o empregado camossionado e salva ele no hashamp
             EmpregadoComissionado emprCom = new EmpregadoComissionado(nome, endereco, tipo, Float.parseFloat(salario),
                     Float.parseFloat(comissao));
-            return EmployeeController.AdicionarEmpregado(emprCom);
+            return EmployeeController.addEmployee(emprCom);
         }
 
         else {
@@ -77,9 +79,22 @@ public class EmployeeController {
 
     }
 
+    public static String addEmployee(Employee emp) throws ExceptionGetEmpregado {
+        String id = Integer.toString(index);
+
+        Empregados.put(id, emp);
+
+        PaymentController.MethodPayment(id, "emMaos");
+
+        index++;
+        return id;
+
+    }
+
     public static String getEmpregadoPorNome(String nome, int id) throws ExceptionGetEmpregado {
 
         for (Map.Entry<String, Employee> emp : EmployeeController.Empregados.entrySet()) {
+
             if (emp.getValue().getNome().equals(nome) && id == 0) {
                 return emp.getKey();
             } else if (emp.getValue().getNome().equals(nome) && id > 0) {
@@ -115,21 +130,9 @@ public class EmployeeController {
         } else if (Empregados.get(emp) == null) {
             throw new EmpregadoNaoExisteException();
         } else {
-            RemoveInDatabase.removeEmpregado(emp);
+            DBHandler.removeData(getEnumDatabase.Employee, emp);
             Empregados.remove(emp);
         }
-
-    }
-
-    public static String AdicionarEmpregado(Employee emp) throws ExceptionGetEmpregado {
-        String id = Integer.toString(index);
-
-        Empregados.put(id, emp);
-
-        PaymentController.MethodPayment(id, "emMaos");
-
-        index++;
-        return id;
 
     }
 
