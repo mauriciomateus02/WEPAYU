@@ -1,4 +1,1 @@
-11;Mariazinha;Rua das Marias, 333 - Campina Grande;assalariado;false;2300.45;semanal 2 5
-12;Gaiato Vendedor;Rua dos Bufoes, 333 - Campina Grande;comissionado;false;2300.45;0.05;semanal 5->[]
-9;Gama Tres Comissionado;Rua Gama, 3 - Corinto;comissionado;false;2800.00;0.11;semanal 5->[1/1/2005;100.00, 2/1/2005;200.00, 16/1/2005;200.00, 30/1/2005;300.00]
-10;Joao da Silva;Rua dos Jooes, 333 - Campina Grande;horista;false;23.00;mensal $->[]
+18;Joao da Silva;Rua dos Jooes, 333 - Campina Grande;horista;false;23.00;mensal 1->[]

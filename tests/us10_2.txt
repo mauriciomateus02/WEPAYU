@@ -1,0 +1,14 @@
+zerarSistema
+id1=criarEmpregado nome="Joao da Silva" endereco="Rua dos Jooes, 333 - Campina Grande" tipo=assalariado salario=2800
+criarAgendaDePagamentos descricao="semanal 3 3"
+alteraEmpregado emp=${id1} atributo=agendaPagamento valor1="semanal 3 3"
+expect 0,00 totalFolha data=1/1/2005
+expect 0,00 totalFolha data=7/1/2005
+expect 0,00 totalFolha data=14/1/2005
+expect 1938,46 totalFolha data=19/1/2005
+expect 0,00 totalFolha data=21/1/2005
+expect 0,00 totalFolha data=28/1/2005
+expect 0,00 totalFolha data=31/1/2005
+expect 0,00 totalFolha data=1/2/2005
+expect 1938,46 totalFolha data=9/2/2005
+expect 1938,46 totalFolha data=25/5/2005
