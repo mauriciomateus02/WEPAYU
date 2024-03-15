@@ -27,7 +27,7 @@ public class Validator {
 
         for (String fromatter : formato) {
             try {
-                // System.out.println(fromatter);
+
                 // define o formato da data
                 DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(fromatter);
                 // converte a data para o formato desejado

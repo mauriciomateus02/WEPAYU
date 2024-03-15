@@ -2,7 +2,10 @@ package br.ufal.ic.p2.wepayu.utils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 
@@ -35,7 +38,7 @@ public class Payroll {
 			float totalPayroll = 0;
 			String salary = "";
 
-			Long checkWeek = ChronoUnit.DAYS.between(contraction, dateVerific);
+			Long check = ChronoUnit.WEEKS.between(contraction, dateVerific);
 
 			for (Map.Entry<String, Employee> entry : EmployeeController.Empregados.entrySet()) {
 				Employee emp = entry.getValue();
@@ -62,7 +65,7 @@ public class Payroll {
 						totalPayroll += total;
 					}
 				} else if (emp.getPaymentDay().contains("semanal")
-						&& checkEmployee(checkWeek, day[0], day[1], dateVerific)) {
+						&& checkEmployee(check + 1, day[0], day[1], dateVerific)) {
 					if (emp.getTipo().equals("assalariado")) {
 						salary = Conversor.converterInvertedCharacter(emp.getSalario());
 
@@ -125,12 +128,11 @@ public class Payroll {
 		}
 	}
 
-	private static Boolean checkEmployee(Long check, int day, int dayWeek, LocalDate dateVerific) {
-
-		if (day == 1 && (check % day == 0 && dateVerific.getDayOfWeek() == dayWeek(dayWeek))) {
+	private static Boolean checkEmployee(Long check, int week, int dayWeek, LocalDate dateVerific) {
+		if (week == 1 && (check % week == 0 && dateVerific.getDayOfWeek() == dayWeek(dayWeek))) {
 			return true;
-		} else if (day > 1 && ((check % ((day * 7) - dayWeek) == 0 && dateVerific.getDayOfWeek() == dayWeek(dayWeek))
-				|| ((check + 1) % ((day * 7)) == 0 && dateVerific.getDayOfWeek() == dayWeek(dayWeek)))) {
+		} else if (week > 1 && ((check % ((week)) == 0 && dateVerific.getDayOfWeek() == dayWeek(dayWeek))
+				|| ((check) % ((week)) == 0 && dateVerific.getDayOfWeek() == dayWeek(dayWeek)))) {
 
 			return true;
 		}
