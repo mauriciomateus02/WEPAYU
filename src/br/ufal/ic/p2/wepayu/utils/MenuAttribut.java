@@ -3,6 +3,7 @@ package br.ufal.ic.p2.wepayu.utils;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.PayrollController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
 import br.ufal.ic.p2.wepayu.models.Employee.Employee;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
@@ -181,7 +182,11 @@ public class MenuAttribut {
                 if (value.isEmpty()) {
                     throw new ExceptionGetEmpregado("agenda de pagamnto nao pode ser nula");
                 }
-                emp.setPaymentDay(value);
+                if (PayrollController.PaymentDays.contains(value))
+                    emp.setPaymentDay(value);
+                else {
+                    throw new ExceptionCriarEmpregado("Agenda de pagamento nao esta disponivel");
+                }
                 break;
             default:
                 throw new ExceptionGetEmpregado("Atributo nao existe.");

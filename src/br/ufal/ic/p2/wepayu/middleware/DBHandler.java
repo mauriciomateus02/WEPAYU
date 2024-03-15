@@ -1,12 +1,15 @@
 package br.ufal.ic.p2.wepayu.middleware;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
+import br.ufal.ic.p2.wepayu.Exception.ExceptionCreatePaymentDay;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.PayrollController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
 import br.ufal.ic.p2.wepayu.middleware.serviceDatabese.PushFiles;
 import br.ufal.ic.p2.wepayu.middleware.serviceDatabese.getFiles;
@@ -35,6 +38,13 @@ public class DBHandler {
 
         selectDatabase(type);
         PushFiles.uploadData(file, map);
+    }
+
+    public static void uploadData(getEnumDatabase type, ArrayList<String> list) throws ExceptionCreatePaymentDay {
+
+        selectDatabase(type);
+        PushFiles.upload(list, file);
+
     }
 
     public static void removeData(getEnumDatabase type, String key)
@@ -66,6 +76,10 @@ public class DBHandler {
                 PaymentController.methodsPayment = new HashMap<>();
                 file = "database/Payment.txt";
                 break;
+            case PaymentDay:
+                PayrollController.PaymentDays = new ArrayList<>();
+                file = "database/PaymentDay.txt";
+                break;
             default:
                 file = null;
                 break;
@@ -82,6 +96,9 @@ public class DBHandler {
                 break;
             case Payment:
                 file = "database/Payment.txt";
+                break;
+            case PaymentDay:
+                file = "database/PaymentDay.txt";
                 break;
             default:
                 break;

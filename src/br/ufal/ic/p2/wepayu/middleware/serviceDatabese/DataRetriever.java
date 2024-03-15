@@ -3,6 +3,7 @@ package br.ufal.ic.p2.wepayu.middleware.serviceDatabese;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.PayrollController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.Sale;
@@ -67,6 +68,8 @@ public class DataRetriever {
             EmpregadoAssalariado emp = new EmpregadoAssalariado(name, address, type, salary);
 
             emp.setSindicalizado(Boolean.parseBoolean(unionized));
+            emp.setPaymentDay(paymentDay);
+
             EmployeeController.Empregados.put(index, emp);
         }
 
@@ -178,5 +181,9 @@ public class DataRetriever {
         EmployeeController.Empregados.get(employeeID).setMethodPayment(payment);
         // salva no hashmap
         PaymentController.methodsPayment.put(employeeID, payment);
+    }
+
+    public static void setPaymentDay(String entitie) {
+        PayrollController.PaymentDays.add(entitie);
     }
 }

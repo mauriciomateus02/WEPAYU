@@ -6,6 +6,7 @@ import java.io.FileWriter;
 
 public class resetFiles {
     public static void resetData(String file) throws FileNotFoundException {
+
         try {
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, false));

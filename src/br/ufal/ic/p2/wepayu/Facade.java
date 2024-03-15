@@ -1,11 +1,7 @@
 package br.ufal.ic.p2.wepayu;
 
-import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
-import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
-import br.ufal.ic.p2.wepayu.Exception.ExceptionRemoveEmpregado;
-import br.ufal.ic.p2.wepayu.Exception.SaleAmountException;
 import br.ufal.ic.p2.wepayu.controller.employee.CardController;
 import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.controller.employee.SaleController;
@@ -16,7 +12,6 @@ import br.ufal.ic.p2.wepayu.middleware.DBHandler;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
 
 import java.io.FileNotFoundException;
-import java.util.zip.DataFormatException;
 
 public class Facade {
 
@@ -24,46 +19,49 @@ public class Facade {
         DBHandler.getData(getEnumDatabase.Employee);
         DBHandler.getData(getEnumDatabase.Unionized);
         DBHandler.getData(getEnumDatabase.Payment);
+        DBHandler.getData(getEnumDatabase.PaymentDay);
 
     }
 
     public void zerarSistema() throws FileNotFoundException {
-
         DBHandler.resetData(getEnumDatabase.Employee);
         DBHandler.resetData(getEnumDatabase.Unionized);
         DBHandler.resetData(getEnumDatabase.Payment);
+        DBHandler.resetData(getEnumDatabase.PaymentDay);
+        PayrollController.resetPaymentDay();
     }
 
-    public void encerrarSistema() throws ExceptionCriarEmpregado, EmpregadoNaoExisteException {
+    public void encerrarSistema() throws Exception {
         // faz o upload dos empregados criados
 
         DBHandler.uploadData(getEnumDatabase.Employee, EmployeeController.Empregados);
         DBHandler.uploadData(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
         DBHandler.uploadData(getEnumDatabase.Payment, PaymentController.methodsPayment);
+        DBHandler.uploadData(getEnumDatabase.PaymentDay, PayrollController.PaymentDays);
     }
 
     public String criarEmpregado(String nome, String endereco, String tipo, String salario)
-            throws ExceptionCriarEmpregado, ExceptionGetEmpregado {
+            throws Exception {
 
         return EmployeeController.criarEmpregado(nome, endereco, tipo, salario);
 
     }
 
     public String criarEmpregado(String nome, String endereco, String tipo, String salario, String comissao)
-            throws ExceptionCriarEmpregado, ExceptionGetEmpregado {
+            throws Exception {
 
         return EmployeeController.criarEmpregado(nome, endereco, tipo, salario, comissao);
 
     }
 
     public String getAtributoEmpregado(String emp, String atributo)
-            throws EmpregadoNaoExisteException, ExceptionGetEmpregado {
+            throws Exception {
 
         return EmployeeController.getAtributo(emp, atributo);
 
     }
 
-    public String getEmpregadoPorNome(String nome, int indice) throws ExceptionGetEmpregado {
+    public String getEmpregadoPorNome(String nome, int indice) throws Exception {
         // como o usuário está buscando os empregados pelo nome o indice significa a
         // posição dele
         // está e n-1 sendo n o indice buscado
@@ -71,40 +69,40 @@ public class Facade {
     }
 
     public void removerEmpregado(String emp)
-            throws EmpregadoNaoExisteException, ExceptionRemoveEmpregado, FileNotFoundException {
+            throws Exception {
         EmployeeController.removerEmpregado(emp);
     }
 
     public void lancaCartao(String emp, String data, String hora)
-            throws EmpregadoNaoExisteException, DataFormatException, DateInvalideException, ExceptionGetEmpregado {
+            throws Exception {
 
         CardController.lancaCartao(emp, data, hora);
     }
 
     public String getHorasNormaisTrabalhadas(String emp, String dataInicio, String dataFinal)
-            throws ExceptionGetEmpregado, DataFormatException, DateInvalideException, EmpregadoNaoExisteException {
+            throws Exception {
 
         return CardController.getHoras(emp, "normal", dataInicio, dataFinal);
     }
 
     public String getHorasExtrasTrabalhadas(String emp, String dataInicio, String dataFinal)
-            throws ExceptionGetEmpregado, DataFormatException, DateInvalideException, EmpregadoNaoExisteException {
+            throws Exception {
         return CardController.getHoras(emp, "extra", dataInicio, dataFinal);
     }
 
     public void lancaVenda(String emp, String date, String value)
-            throws DateInvalideException, SaleAmountException, ExceptionGetEmpregado {
+            throws Exception {
 
         SaleController.registerSale(emp, date, value);
     }
 
     public String getVendasRealizadas(String emp, String dateInitial, String deadline)
-            throws DateInvalideException, ExceptionGetEmpregado {
+            throws Exception {
         return SaleController.sumOfSalesAmount(emp, dateInitial, deadline);
     }
 
     public void alteraEmpregado(String emp, String attribut, String value, String unionizedID, String unionFee)
-            throws ExceptionGetEmpregado, EmpregadoNaoExisteException, NumberFormatException, ExceptionCriarEmpregado {
+            throws Exception {
 
         if (emp.isEmpty()) {
             throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
@@ -117,41 +115,41 @@ public class Facade {
     }
 
     public void alteraEmpregado(String emp, String attribut, String value)
-            throws ExceptionGetEmpregado, EmpregadoNaoExisteException, NumberFormatException, ExceptionCriarEmpregado {
-        if (emp.isEmpty()) {
-            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
-        } else if (!EmployeeController.Empregados.containsKey(emp)) {
-            throw new EmpregadoNaoExisteException();
-        }
+            throws Exception {
 
         EmployeeController.setEmployee(emp, attribut, value);
 
     }
 
     public void alteraEmpregado(String emp, String attribut, String value, String bank, String agency,
-            String accountNumber) throws ExceptionGetEmpregado {
+            String accountNumber) throws Exception {
 
         EmployeeController.setEmployee(emp, attribut, value, bank, agency, accountNumber);
 
     }
 
     public void alteraEmpregado(String emp, String attribut, String value, String commission)
-            throws NumberFormatException, ExceptionGetEmpregado, ExceptionCriarEmpregado, EmpregadoNaoExisteException {
+            throws Exception {
         EmployeeController.setEmployee(emp, attribut, value, commission);
     }
 
     public String getTaxasServico(String emp, String dateInitial, String deadline)
-            throws ExceptionGetEmpregado, DateInvalideException, EmpregadoNaoExisteException {
+            throws Exception {
         return UnionServiceController.getServiceFee(emp, dateInitial, deadline);
     }
 
     public void lancaTaxaServico(String unionizedID, String date, String value)
-            throws DateInvalideException, ExceptionGetEmpregado {
+            throws Exception {
         UnionServiceController.createServiceFee(unionizedID, date, value);
     }
 
     public String totalFolha(String date)
-            throws ExceptionGetEmpregado, DateInvalideException, DataFormatException, EmpregadoNaoExisteException {
+            throws Exception {
         return PayrollController.totalPayroll(date);
     }
+
+    public void criarAgendaDePagamentos(String descricao) throws Exception {
+        PayrollController.createPaymentDay(descricao);
+    }
+
 }
