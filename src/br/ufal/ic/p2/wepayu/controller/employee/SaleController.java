@@ -56,30 +56,26 @@ public class SaleController {
 
             float amount = 0;
 
-            LocalDate dateFinal = null, dateVerific = null;
+            LocalDate dateFinal = null, dateVerific = null, dateInitial = null;
             String temp;
             // converte a string em data para ser analisada.
             dateFinal = Conversor.converterDate(deadline, 2);
 
-            String[] dateInitial = startDate.split("/");
+            dateInitial = Conversor.converterDate(startDate, 1);
 
             for (Sale sale : employee.getSale()) {
                 // tipo 3 é conversão de data de forma nomal
                 dateVerific = Conversor.converterDate(sale.getDate(), 3);
-
+                temp = sale.getValue();
                 if (Validator.validatorRangeDate(dateInitial, dateVerific, dateFinal)) {
-                    if (sale.getValue().contains(",")) {
-                        //
-                        temp = Conversor.converterInvertedCharacter(sale.getValue());
-                        amount += Float.parseFloat(temp);
-                    } else {
-                        amount += Float.parseFloat(sale.getValue());
-                    }
+                    if (temp.contains(","))
+                        temp = Conversor.converterInvertedCharacter(temp);
+                    amount += Float.parseFloat(temp);
                 }
             }
             // ao somar o valor resultante é convertido para duas casas decimais é
             // convertido o . em ,
-            return Conversor.converterCharacter(String.format("%.2f", amount));
+            return String.format("%.2f", amount);
         }
     }
 

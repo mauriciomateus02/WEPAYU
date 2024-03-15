@@ -74,6 +74,8 @@ public class MenuAttribut {
                 } else {
                     throw new ExceptionGetEmpregado("Empregado nao eh sindicalizado.");
                 }
+            case "agendaPagamento":
+                return emp.getPaymentDay();
             default:
                 throw new ExceptionGetEmpregado("Atributo nao existe.");
         }
@@ -174,6 +176,12 @@ public class MenuAttribut {
 
             case "metodoPagamento":
                 PaymentController.MethodPayment(employeeID, value);
+                break;
+            case "agendaPagamento":
+                if (value.isEmpty()) {
+                    throw new ExceptionGetEmpregado("agenda de pagamnto nao pode ser nula");
+                }
+                emp.setPaymentDay(value);
                 break;
             default:
                 throw new ExceptionGetEmpregado("Atributo nao existe.");

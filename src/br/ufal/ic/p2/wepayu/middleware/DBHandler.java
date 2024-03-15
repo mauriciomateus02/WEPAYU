@@ -21,23 +21,8 @@ public class DBHandler {
     public static void getData(getEnumDatabase type)
             throws FileNotFoundException {
 
-        switch (type) {
-            case Employee:
-                EmployeeController.Empregados = new HashMap<>();
-                file = "database/Employee.txt";
-                break;
-            case Unionized:
-                UnionServiceController.employeesUnionzed = new HashMap<>();
-                file = "database/Unionized.txt";
-                break;
-            case Payment:
-                PaymentController.methodsPayment = new HashMap<>();
-                file = "database/Payment.txt";
-                break;
-            default:
-                file = null;
-                break;
-        }
+        searchDatabase(type);
+
         getFiles.getEntites(file);
 
         if (type == getEnumDatabase.Employee) {
@@ -48,52 +33,29 @@ public class DBHandler {
     public static <T> void uploadData(getEnumDatabase type, HashMap<String, T> map)
             throws EmpregadoNaoExisteException, ExceptionCriarEmpregado {
 
-        switch (type) {
-            case Employee:
-                file = "database/Employee.txt";
-                break;
-            case Unionized:
-                file = "database/Unionized.txt";
-                break;
-            case Payment:
-                file = "database/Payment.txt";
-                break;
-            case Default:
-                file = "ok/teste.txt";
-            default:
-                break;
-        }
-
+        selectDatabase(type);
         PushFiles.uploadData(file, map);
     }
 
     public static void removeData(getEnumDatabase type, String key)
             throws FileNotFoundException, EmpregadoNaoExisteException {
 
-        switch (type) {
-            case Employee:
-                file = "database/Employee.txt";
-                break;
-            case Unionized:
-                file = "database/Unionized.txt";
-                break;
-            case Payment:
-                file = "database/Payment.txt";
-                break;
-            case Default:
-                file = "ok/teste.txt";
-            default:
-                break;
-        }
-
+        selectDatabase(type);
+        removeLine.removeEntities(file, key);
+        selectDatabase(getEnumDatabase.Payment);
         removeLine.removeEntities(file, key);
     }
 
     public static void resetData(getEnumDatabase type) throws FileNotFoundException {
+
+        searchDatabase(type);
+        resetFiles.resetData(file);
+    }
+
+    private static void searchDatabase(getEnumDatabase type) {
         switch (type) {
             case Employee:
                 EmployeeController.Empregados = new HashMap<>();
-
                 file = "database/Employee.txt";
                 break;
             case Unionized:
@@ -108,8 +70,22 @@ public class DBHandler {
                 file = null;
                 break;
         }
+    }
 
-        resetFiles.resetData(file);
+    private static void selectDatabase(getEnumDatabase type) {
+        switch (type) {
+            case Employee:
+                file = "database/Employee.txt";
+                break;
+            case Unionized:
+                file = "database/Unionized.txt";
+                break;
+            case Payment:
+                file = "database/Payment.txt";
+                break;
+            default:
+                break;
+        }
     }
 
 }

@@ -108,17 +108,12 @@ public class Validator {
         }
     }
 
-    public static Boolean validatorRangeDate(String[] dateInitial, LocalDate dateVerific, LocalDate deadline) {
+    public static Boolean validatorRangeDate(LocalDate startDate, LocalDate dateVerific, LocalDate deadline) {
 
-        int VerificDay = Integer.parseInt(dateInitial[0]);
-        int VerificMonth = Integer.parseInt(dateInitial[1]);
-        int VerificYear = Integer.parseInt(dateInitial[2]);
-
-        if ((dateVerific.getDayOfMonth() >= VerificDay
-                && dateVerific.getMonthValue() >= VerificMonth
-                && dateVerific.getYear() >= VerificYear)
+        if (dateVerific.getDayOfYear() >= startDate.getDayOfYear()
+                && dateVerific.getYear() == startDate.getYear()
                 && dateVerific.getDayOfYear() < deadline.getDayOfYear()
-                && dateVerific.getYear() <= deadline.getYear()) {
+                && dateVerific.getYear() == deadline.getYear()) {
 
             return true;
         }

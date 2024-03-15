@@ -31,7 +31,8 @@ public class UnionServiceController {
         }
         // verifica se a txa contém virgula e se tiver troca pelo ponto
         // para poder converter o valor em float
-
+        if (unionfee.contains(","))
+            unionfee = Conversor.converterInvertedCharacter(unionfee);
         float valueUnionFee = Conversor.conversorNumeric("taxaSindical", unionfee);
 
         if (valueUnionFee <= 0) {
@@ -96,7 +97,7 @@ public class UnionServiceController {
         Validator.validateSearchDate(startDate, deadline);
 
         // cria variaveis do tipo data para fazer a validação
-        LocalDate dateFinal = null, dateVerific = null;
+        LocalDate dateFinal = null, dateVerific = null, dateInitial = null;
         // variavel para auxiliar na conversão dos valores
         String temp;
         float value = 0;
@@ -104,7 +105,7 @@ public class UnionServiceController {
         // converte a data que foi enviada e verifica se está correta
         dateFinal = Conversor.converterDate(deadline, 2);
         // divide a data inicial para analisar o range
-        String[] dateInitial = startDate.split("/");
+        dateInitial = Conversor.converterDate(startDate, 1);
 
         // pega o empregado sindicalizado
         Unionized union = EmployeeController.Empregados.get(employeeID).getUnionized();
@@ -126,7 +127,7 @@ public class UnionServiceController {
             }
         }
 
-        return Conversor.converterCharacter(String.format("%.2f", value));
+        return String.format("%.2f", value);
     }
 
     public static void addUnionized(String unionizedID, Unionized union) {

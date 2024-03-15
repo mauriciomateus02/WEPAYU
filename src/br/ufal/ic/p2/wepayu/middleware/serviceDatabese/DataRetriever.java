@@ -20,13 +20,14 @@ public class DataRetriever {
 
     protected static void setEmployee(String index, String name, String address,
             String type, String unionized,
-            float salary, String[] list) throws ExceptionCriarEmpregado {
+            float salary, String paymentDay, String[] list) throws ExceptionCriarEmpregado {
 
         if (type.equals("horista")) {
             // recria o funcionario horista
             EmpregadoHorista emp = new EmpregadoHorista(name, address, type, salary);
             // informa se o empregado é sindicalizado ou não.
             emp.setSindicalizado(Boolean.parseBoolean(unionized));
+            emp.setPaymentDay(paymentDay);
 
             for (String cardPoint : list) {
 
@@ -49,13 +50,16 @@ public class DataRetriever {
 
     protected static void setEmployee(String index, String name, String address,
             String type, String unionized,
-            float salary) throws ExceptionCriarEmpregado {
+            float salary, String paymentDay) throws ExceptionCriarEmpregado {
 
         if (type.equals("horista")) {
             // recria o funcionario horista
             EmpregadoHorista emp = new EmpregadoHorista(name, address, type, salary);
+
             // informa se o empregado é sindicalizado ou não.
             emp.setSindicalizado(Boolean.parseBoolean(unionized));
+            // indica o dia de pagamento
+            emp.setPaymentDay(paymentDay);
 
             EmployeeController.Empregados.put(index, emp);
 
@@ -74,7 +78,7 @@ public class DataRetriever {
     }
 
     protected static void setEmployee(String index, String name, String address,
-            String type, String unionized, float salary, float commission, String[] list)
+            String type, String unionized, float salary, float commission, String paymentDay, String[] list)
             throws ExceptionCriarEmpregado {
 
         if (type.equals("comissionado")) {
@@ -83,6 +87,8 @@ public class DataRetriever {
 
             // informa se o empregado é sindicalizado ou não.
             emp.setSindicalizado(Boolean.parseBoolean(unionized));
+            // indica o dia de pagamento
+            emp.setPaymentDay(paymentDay);
 
             for (String cardPoint : list) {
 
@@ -106,13 +112,15 @@ public class DataRetriever {
 
     protected static void setEmployee(String index, String name, String address,
             String type, String unionized,
-            float salary, float commission) throws ExceptionCriarEmpregado {
+            float salary, float commission, String paymentDay) throws ExceptionCriarEmpregado {
 
         if (type.equals("comissionado")) {
             // recria o funcionario horista
             EmpregadoComissionado emp = new EmpregadoComissionado(name, address, type, salary, commission);
             // informa se o empregado é sindicalizado ou não.
             emp.setSindicalizado(Boolean.parseBoolean(unionized));
+            // indica o dia de pagamento
+            emp.setPaymentDay(paymentDay);
 
             EmployeeController.Empregados.put(index, emp);
         }
