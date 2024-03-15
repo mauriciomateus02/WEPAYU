@@ -142,7 +142,7 @@ public class EmployeeController {
         if (emp.isEmpty()) {
             throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
         } else if (!EmployeeController.Empregados.containsKey(emp)) {
-            throw new ExceptionGetEmpregado("Empregado nao existe");
+            throw new ExceptionGetEmpregado("Empregado nao existe.");
         }
         Employee employee = EmployeeController.Empregados.get(emp);
 

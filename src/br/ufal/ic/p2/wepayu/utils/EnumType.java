@@ -18,6 +18,7 @@ public class EnumType {
         Employee,
         Unionized,
         Payment,
+        PaymentDay,
         Default
     }
 

@@ -82,7 +82,7 @@ public class ValidatorOfEntity {
 
             }
 
-            else {
+            else if (entitie.contains(";")) {
 
                 objEntitie = entitie.split(";");
 
@@ -110,6 +110,8 @@ public class ValidatorOfEntity {
                     }
                 }
 
+            } else {
+                DataRetriever.setPaymentDay(entitie);
             }
 
         } catch (Exception e) {

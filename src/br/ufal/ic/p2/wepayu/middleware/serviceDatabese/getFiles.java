@@ -15,6 +15,7 @@ public class getFiles {
             BufferedReader reader = new BufferedReader(new FileReader(file));
 
             while ((linha = reader.readLine()) != null) {
+
                 ValidatorOfEntity.setEntities(linha);
             }
             // verifica se a requisição de pegar os dados de do tipo employee
