@@ -12,7 +12,7 @@ public class EmpregadoAssalariado extends Employee {
             throws ExceptionCriarEmpregado {
         super(nome, endereco, tipo);
         this.salarioMensal = salarioMensal;
-
+        setPaymentDay("mensal $");
     }
 
     // Nesse método é convertido o salario em um numero com 2 casas decimais e
@@ -26,7 +26,7 @@ public class EmpregadoAssalariado extends Employee {
     @Override
     public String toString() {
         return getNome() + ";" + getEndereco() + ";" + getTipo() + ";" + getSindicalizado() + ";"
-                + Conversor.converterInvertedCharacter(getSalario());
+                + Conversor.converterInvertedCharacter(getSalario()) + ";" + getPaymentDay();
     }
 
     @Override

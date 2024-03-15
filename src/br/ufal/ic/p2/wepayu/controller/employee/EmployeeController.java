@@ -132,6 +132,7 @@ public class EmployeeController {
         } else {
             DBHandler.removeData(getEnumDatabase.Employee, emp);
             Empregados.remove(emp);
+            PaymentController.methodsPayment.remove(emp);
         }
 
     }

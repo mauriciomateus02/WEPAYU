@@ -36,7 +36,7 @@ public class ValidatorOfEntity {
                         objEntitie[5] = Conversor.converterInvertedCharacter(objEntitie[5]);
                         DataRetriever.setEmployee(objEntitie[0], objEntitie[1], objEntitie[2], objEntitie[3],
                                 objEntitie[4],
-                                Float.parseFloat(objEntitie[5]),
+                                Float.parseFloat(objEntitie[5]), objEntitie[6],
                                 list);
                     } else if (objEntitie[3].equals("comissionado")) {
                         // como o tamanho é 6 significa que é comissionado.
@@ -46,7 +46,7 @@ public class ValidatorOfEntity {
                         DataRetriever.setEmployee(objEntitie[0], objEntitie[1], objEntitie[2], objEntitie[3],
                                 objEntitie[4],
                                 Float.parseFloat(objEntitie[5]),
-                                Float.parseFloat(objEntitie[6]), list);
+                                Float.parseFloat(objEntitie[6]), objEntitie[7], list);
                     }
 
                 }
@@ -65,7 +65,7 @@ public class ValidatorOfEntity {
 
                         DataRetriever.setEmployee(objEntitie[0], objEntitie[1], objEntitie[2], objEntitie[3],
                                 objEntitie[4],
-                                Float.parseFloat(objEntitie[5]));
+                                Float.parseFloat(objEntitie[5]), objEntitie[6]);
 
                     } else if (objEntitie[3].equals("comissionado")) {
                         // converte o salario para o tipo float
@@ -76,7 +76,7 @@ public class ValidatorOfEntity {
                         DataRetriever.setEmployee(objEntitie[0], objEntitie[1], objEntitie[2], objEntitie[3],
                                 objEntitie[4],
                                 Float.parseFloat(objEntitie[5]),
-                                Float.parseFloat(objEntitie[6]));
+                                Float.parseFloat(objEntitie[6]), objEntitie[7]);
                     }
                 }
 
@@ -93,7 +93,7 @@ public class ValidatorOfEntity {
                     }
                 }
 
-                else if (objEntitie.length == 6) {
+                else if (objEntitie.length >= 6) {
                     // verifica se é tipo de pagamento
                     if (objEntitie[2].equals("banco")) {
                         DataRetriever.setPayment(objEntitie[1], objEntitie[2], objEntitie[3], objEntitie[4],
@@ -106,7 +106,7 @@ public class ValidatorOfEntity {
 
                         DataRetriever.setEmployee(objEntitie[0], objEntitie[1], objEntitie[2], objEntitie[3],
                                 objEntitie[4],
-                                Float.parseFloat(objEntitie[5]));
+                                Float.parseFloat(objEntitie[5]), objEntitie[6]);
                     }
                 }
 

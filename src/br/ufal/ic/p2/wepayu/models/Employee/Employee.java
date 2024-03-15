@@ -7,7 +7,7 @@ public abstract class Employee {
     private String nome;
     private String endereco;
     private String tipo;
-
+    private String paymentDay;
     private Boolean sindic;
     private Unionized union;
     private Payment methodPayment;
@@ -21,6 +21,14 @@ public abstract class Employee {
 
     public String getNome() {
         return nome;
+    }
+
+    public String getPaymentDay() {
+        return paymentDay;
+    }
+
+    public void setPaymentDay(String payment) {
+        paymentDay = payment;
     }
 
     public void setNome(String nome) {

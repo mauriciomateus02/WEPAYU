@@ -18,6 +18,7 @@ public class EmpregadoComissionado extends Employee {
         super(nome, endereco, tipo);
         this.comissao = comissao;
         this.salario = salario;
+        setPaymentDay("semanal 2 5");
 
     }
 
@@ -55,7 +56,7 @@ public class EmpregadoComissionado extends Employee {
     public String toString() {
         return getNome() + ";" + getEndereco() + ";" + getTipo() + ";" + getSindicalizado() + ";"
                 + Conversor.converterInvertedCharacter(getSalario()) + ";"
-                + Conversor.converterInvertedCharacter(getComissao()) + "->" + sales;
+                + Conversor.converterInvertedCharacter(getComissao()) + ";" + getPaymentDay() + "->" + sales;
     }
 
 }

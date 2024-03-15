@@ -14,6 +14,7 @@ public class EmpregadoHorista extends Employee {
             throws ExceptionCriarEmpregado {
         super(nome, endereco, tipo);
         this.salarioHora = salario;
+        setPaymentDay("semanal 5");
 
     }
 
@@ -35,7 +36,7 @@ public class EmpregadoHorista extends Employee {
     @Override
     public String toString() {
         return getNome() + ";" + getEndereco() + ";" + getTipo() + ";" + getSindicalizado() + ";"
-                + Conversor.converterInvertedCharacter(getSalario()) + ";"
+                + Conversor.converterInvertedCharacter(getSalario()) + ";" + getPaymentDay()
                 + "->" + cartaoPontos;
     }
 

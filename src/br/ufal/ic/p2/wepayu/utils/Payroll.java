@@ -2,7 +2,7 @@ package br.ufal.ic.p2.wepayu.utils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 
@@ -26,13 +26,17 @@ public class Payroll {
 			EmpregadoNaoExisteException {
 
 		try {
+
 			Validator.validatorDate(date, getEnumActiveTurn.Default);
 
 			LocalDate dateVerific = Conversor.converterDate(date, 3);
-
+			LocalDate contraction = LocalDate.of(2005, 1, 1);
 			LocalDate startDate = null;
+
 			float totalPayroll = 0;
 			String salary = "", value = "", dataInitial, datafinal;
+
+			Long checkWeek = ChronoUnit.DAYS.between(contraction, dateVerific);
 
 			for (Map.Entry<String, Employee> entry : EmployeeController.Empregados.entrySet()) {
 				Employee emp = entry.getValue();
@@ -68,12 +72,14 @@ public class Payroll {
 
 					// adiciona o valor das horas extras
 
-					totalPayroll += Double.parseDouble(value) * Double.parseDouble(salary) * 150 / 100F;
+					totalPayroll += Float.parseFloat(value) * (Float.parseFloat(salary) * 1.5);
 
 				}
 
 				if (emp.getTipo().equals("comissionado")
-						&& dateVerific.get(WeekFields.ISO.weekOfWeekBasedYear()) % 2 == 0) {
+						&& ((checkWeek % 14 == 0 && dateVerific.getDayOfWeek() != DayOfWeek.SATURDAY
+								&& dateVerific.getDayOfWeek() != DayOfWeek.SUNDAY) ||
+								(checkWeek + 1) % 14 == 0 && dateVerific.getDayOfWeek() == DayOfWeek.FRIDAY)) {
 
 					EmpregadoComissionado employee = (EmpregadoComissionado) emp;
 					startDate = dateVerific.minusDays(13);
@@ -90,18 +96,28 @@ public class Payroll {
 
 					value = Conversor.converterInvertedCharacter(value);
 					salary = Conversor.converterInvertedCharacter(employee.getSalario());
-					String commission = Conversor
-							.converterInvertedCharacter(employee.getComissao());
+					String commission = Conversor.converterInvertedCharacter(employee.getComissao());
+
 					// soma o valor do empregado comissionado
-					totalPayroll += (Float.parseFloat(value) * Float.parseFloat(commission))
-							+ Float.parseFloat(salary);
+					Double salarioAmount = Double.parseDouble(salary);
+
+					Double commissionAmount = (Double.parseDouble(value) * Double.parseDouble(commission));
+
+					salarioAmount = Math.floor((salarioAmount * (12D / 52D)) * 2D * 100) / 100F;
+					salarioAmount = ((int) (salarioAmount * 100)) / 100.0d;
+
+					commissionAmount = Math.floor(commissionAmount * 100) / 100F;
+
+					totalPayroll += salarioAmount + commissionAmount;
 
 				}
+
 				if (emp.getTipo().equals("assalariado")
 						&& dateVerific.getDayOfMonth() == dateVerific.lengthOfMonth()) {
 
 					salary = Conversor.converterInvertedCharacter(emp.getSalario());
 					totalPayroll += Float.parseFloat(salary);
+
 				}
 			}
 			return String.format("%.2f", totalPayroll);
