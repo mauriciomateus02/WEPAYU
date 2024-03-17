@@ -9,6 +9,7 @@ import br.ufal.ic.p2.wepayu.Exception.ExceptionCreatePaymentDay;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 // import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 // import br.ufal.ic.p2.wepayu.models.Employee.Employee;
+import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 import br.ufal.ic.p2.wepayu.utils.Payroll;
 
 public class PayrollController {
@@ -17,10 +18,11 @@ public class PayrollController {
 
     public static String totalPayroll(String data)
             throws ExceptionGetEmpregado, DateInvalideException, DataFormatException, EmpregadoNaoExisteException {
+
         if (data.isEmpty())
             throw new ExceptionGetEmpregado("Data deve ser nao nulo.");
 
-        return Payroll.TotalPayroll(data);
+        return Conversor.converterCharacter(Payroll.TotalPayroll(data));
     }
 
     // public static void getPayroll(String emp, String date) {
