@@ -127,7 +127,9 @@ public class UnionServiceController {
             }
         }
 
-        return String.format("%.2f", value);
+        String value_as_string = String.format("%.2f", value);
+        return Conversor.converterCharacter(value_as_string);
+        // Valor formatado em duas casas decimais e retornado como string com vírgula
     }
 
     public static void addUnionized(String unionizedID, Unionized union) {

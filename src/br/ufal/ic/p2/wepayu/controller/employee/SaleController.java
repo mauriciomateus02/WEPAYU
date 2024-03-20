@@ -75,7 +75,9 @@ public class SaleController {
             }
             // ao somar o valor resultante é convertido para duas casas decimais é
             // convertido o . em ,
-            return String.format("%.2f", amount);
+            String amount_as_string = String.format("%.2f", amount);
+            return Conversor.converterCharacter(amount_as_string);
+            // Valor formatado em duas casas decimais e retornado como string com vírgula
         }
     }
 

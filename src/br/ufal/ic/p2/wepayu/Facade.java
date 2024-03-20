@@ -20,7 +20,6 @@ public class Facade {
         DBHandler.getData(getEnumDatabase.Unionized);
         DBHandler.getData(getEnumDatabase.Payment);
         DBHandler.getData(getEnumDatabase.PaymentDay);
-
     }
 
     public void zerarSistema() throws FileNotFoundException {
@@ -32,7 +31,7 @@ public class Facade {
     }
 
     public void encerrarSistema() throws Exception {
-        // faz o upload dos empregados criados
+        /* Faz upload dos empregados criados */
 
         DBHandler.uploadData(getEnumDatabase.Employee, EmployeeController.Empregados);
         DBHandler.uploadData(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
@@ -44,27 +43,25 @@ public class Facade {
             throws Exception {
 
         return EmployeeController.criarEmpregado(nome, endereco, tipo, salario);
-
     }
 
     public String criarEmpregado(String nome, String endereco, String tipo, String salario, String comissao)
             throws Exception {
 
         return EmployeeController.criarEmpregado(nome, endereco, tipo, salario, comissao);
-
     }
 
     public String getAtributoEmpregado(String emp, String atributo)
             throws Exception {
 
         return EmployeeController.getAtributo(emp, atributo);
-
     }
 
     public String getEmpregadoPorNome(String nome, int indice) throws Exception {
         // como o usuário está buscando os empregados pelo nome o indice significa a
         // posição dele
         // está e n-1 sendo n o indice buscado
+
         return EmployeeController.getEmpregadoPorNome(nome, indice - 1);
     }
 
@@ -98,6 +95,7 @@ public class Facade {
 
     public String getVendasRealizadas(String emp, String dateInitial, String deadline)
             throws Exception {
+
         return SaleController.sumOfSalesAmount(emp, dateInitial, deadline);
     }
 
@@ -111,40 +109,41 @@ public class Facade {
         }
 
         EmployeeController.setEmployee(emp, attribut, value, unionizedID, unionFee);
-
     }
 
     public void alteraEmpregado(String emp, String attribut, String value)
             throws Exception {
 
         EmployeeController.setEmployee(emp, attribut, value);
-
     }
 
     public void alteraEmpregado(String emp, String attribut, String value, String bank, String agency,
             String accountNumber) throws Exception {
 
         EmployeeController.setEmployee(emp, attribut, value, bank, agency, accountNumber);
-
     }
 
     public void alteraEmpregado(String emp, String attribut, String value, String commission)
             throws Exception {
+
         EmployeeController.setEmployee(emp, attribut, value, commission);
     }
 
     public String getTaxasServico(String emp, String dateInitial, String deadline)
             throws Exception {
+
         return UnionServiceController.getServiceFee(emp, dateInitial, deadline);
     }
 
     public void lancaTaxaServico(String unionizedID, String date, String value)
             throws Exception {
+
         UnionServiceController.createServiceFee(unionizedID, date, value);
     }
 
     public String totalFolha(String date)
             throws Exception {
+
         return PayrollController.totalPayroll(date);
     }
 
