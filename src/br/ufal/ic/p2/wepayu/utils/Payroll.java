@@ -13,8 +13,8 @@ import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.controller.employee.CardController;
-import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
-import br.ufal.ic.p2.wepayu.controller.employee.SaleController;
+import br.ufal.ic.p2.wepayu.controller.employee.ControllerEmpregado;
+import br.ufal.ic.p2.wepayu.controller.employee.ControllerVenda;
 import br.ufal.ic.p2.wepayu.models.Employee.Employee;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.Employee.Hourly.EmpregadoHorista;
@@ -40,7 +40,7 @@ public class Payroll {
 
 			Long check = ChronoUnit.WEEKS.between(contraction, dateVerific);
 
-			for (Map.Entry<String, Employee> entry : EmployeeController.Empregados.entrySet()) {
+			for (Map.Entry<String, Employee> entry : ControllerEmpregado.Empregados.entrySet()) {
 				Employee emp = entry.getValue();
 
 				int[] day = getPaymentEmployee(emp.getPaymentDay(), dateVerific);
@@ -174,7 +174,7 @@ public class Payroll {
 
 		EmpregadoComissionado employee = (EmpregadoComissionado) emp;
 		LocalDate startDate = null;
-		String dataInitial, datafinal, value, salary;
+		String dataInitial, datafinal, valor, salary;
 
 		if (emp.getPaymentDay().contains("mensal"))
 			startDate = dateVerific.minusDays(day[1] - 1);
@@ -188,16 +188,16 @@ public class Payroll {
 				+ "/"
 				+ dateVerific.getYear();
 
-		value = SaleController.sumOfSalesAmount(key, dataInitial, datafinal);
+		valor = ControllerVenda.sumOfSalesAmount(key, dataInitial, datafinal);
 
-		value = Conversor.converterInvertedCharacter(value);
+		valor = Conversor.converterInvertedCharacter(valor);
 		salary = Conversor.converterInvertedCharacter(employee.getSalario());
 		String commission = Conversor.converterInvertedCharacter(employee.getComissao());
 
 		// soma o valor do empregado comissionado
 		Double salarioAmount = Double.parseDouble(salary);
 
-		Double commissionAmount = (Double.parseDouble(value) * Double.parseDouble(commission));
+		Double commissionAmount = (Double.parseDouble(valor) * Double.parseDouble(commission));
 		double dividendo = (double) day[2];
 		if (!emp.getPaymentDay().contains("mensal"))
 			salarioAmount = Math.floor((salarioAmount * (dividendo / 52D)) * 2D * 100) / 100F;
@@ -213,7 +213,7 @@ public class Payroll {
 		EmpregadoHorista employee = (EmpregadoHorista) emp;
 		LocalDate startDate;
 		double totalPayroll = 0.0;
-		String dataInitial, datafinal, value, salary;
+		String dataInitial, datafinal, valor, salary;
 		if (emp.getPaymentDay().contains("mensal"))
 			startDate = dateVerific.minusDays(day[1] - 1);
 		else
@@ -227,22 +227,22 @@ public class Payroll {
 
 		// pega o valor das horas normais.
 
-		value = CardController.getHoras(key, "normal", dataInitial,
+		valor = CardController.getHoras(key, "normal", dataInitial,
 				datafinal);
 
 		salary = Conversor.converterInvertedCharacter(employee.getSalario());
 
 		// soma os valores encontrados
 
-		totalPayroll += Float.parseFloat(value) * Float.parseFloat(salary);
+		totalPayroll += Float.parseFloat(valor) * Float.parseFloat(salary);
 
 		// pega o valor das horas extras
-		value = CardController.getHoras(key, "extra", dataInitial,
+		valor = CardController.getHoras(key, "extra", dataInitial,
 				datafinal);
 
 		// adiciona o valor das horas extras
 
-		totalPayroll += Float.parseFloat(value) * (Float.parseFloat(salary) * 1.5);
+		totalPayroll += Float.parseFloat(valor) * (Float.parseFloat(salary) * 1.5);
 
 		return totalPayroll;
 	}

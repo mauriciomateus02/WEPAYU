@@ -10,7 +10,7 @@ public class EnumType {
 
     public enum getEnumActiveTurn {
         InitialDate,
-        DeadLine,
+        prazo,
         Default
     }
 

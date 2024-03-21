@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
-import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
+import br.ufal.ic.p2.wepayu.controller.employee.ControllerEmpregado;
 import br.ufal.ic.p2.wepayu.models.Employee.Employee;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.Employee.Hourly.EmpregadoHorista;
@@ -95,7 +95,7 @@ public class Conversor {
             default:
                 throw new ExceptionGetEmpregado("Tipo invalido.");
         }
-        EmployeeController.Empregados.put(employeeID, NewEmployee);
+        ControllerEmpregado.Empregados.put(employeeID, NewEmployee);
     }
 
     static public void converterEmployee(String employeeID, Employee employee, String type, String amount)
@@ -151,15 +151,15 @@ public class Conversor {
                 throw new ExceptionGetEmpregado("Tipo invalido.");
         }
 
-        EmployeeController.Empregados.put(employeeID, NewEmployee);
+        ControllerEmpregado.Empregados.put(employeeID, NewEmployee);
     }
 
-    public static float conversorNumeric(String attribut, String value) throws ExceptionGetEmpregado {
+    public static float conversorNumeric(String atributo, String valor) throws ExceptionGetEmpregado {
         try {
-            return Float.parseFloat(value);
+            return Float.parseFloat(valor);
         } catch (Exception e) {
 
-            switch (attribut) {
+            switch (atributo) {
                 case "salario":
                     throw new ExceptionGetEmpregado("Salario deve ser numerico.");
                 case "comissao":

@@ -7,31 +7,31 @@ import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 public class Unionized {
 
     private String employeeID;
-    private String unionizedID;
-    private Float unionFee;
+    private String IDsindicalizado;
+    private Float taxaSindicato;
     // Employee employee;
     private ArrayList<ServiceFee> services = new ArrayList<>();
 
-    public Unionized(String unionizedID, String employeeID, Float unionFee) {
-        this.unionizedID = unionizedID;
+    public Unionized(String IDsindicalizado, String employeeID, Float taxaSindicato) {
+        this.IDsindicalizado = IDsindicalizado;
         this.employeeID = employeeID;
-        this.unionFee = unionFee;
+        this.taxaSindicato = taxaSindicato;
     }
 
-    public String getUnionizedID() {
-        return unionizedID;
+    public String getIDsindicalizado() {
+        return IDsindicalizado;
     }
 
     public String getEmployeeID() {
         return employeeID;
     }
 
-    public String getUnionFee() {
-        return Conversor.converterInvertedCharacter(String.format("%.2f", unionFee));
+    public String gettaxaSindicato() {
+        return Conversor.converterInvertedCharacter(String.format("%.2f", taxaSindicato));
     }
 
-    public void setUnionFee(float unionFee) {
-        this.unionFee = unionFee;
+    public void settaxaSindicato(float taxaSindicato) {
+        this.taxaSindicato = taxaSindicato;
     }
 
     public ArrayList<ServiceFee> getServiceFee() {
@@ -44,6 +44,6 @@ public class Unionized {
 
     @Override
     public String toString() {
-        return getUnionizedID() + ";" + getEmployeeID() + ";" + getUnionFee() + "->" + services;
+        return getIDsindicalizado() + ";" + getEmployeeID() + ";" + gettaxaSindicato() + "->" + services;
     }
 }

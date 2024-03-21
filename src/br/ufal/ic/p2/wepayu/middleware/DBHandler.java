@@ -7,9 +7,9 @@ import java.util.HashMap;
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCreatePaymentDay;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
-import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
+import br.ufal.ic.p2.wepayu.controller.employee.ControllerEmpregado;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
-import br.ufal.ic.p2.wepayu.controller.humanResources.PayrollController;
+import br.ufal.ic.p2.wepayu.controller.humanResources.ControllerFolhaPagamento;
 import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
 import br.ufal.ic.p2.wepayu.middleware.serviceDatabese.PushFiles;
 import br.ufal.ic.p2.wepayu.middleware.serviceDatabese.getFiles;
@@ -29,7 +29,7 @@ public class DBHandler {
         getFiles.getEntites(file);
 
         if (type == getEnumDatabase.Employee) {
-            EmployeeController.index += 1;
+            ControllerEmpregado.index += 1;
         }
     }
 
@@ -65,7 +65,7 @@ public class DBHandler {
     private static void searchDatabase(getEnumDatabase type) {
         switch (type) {
             case Employee:
-                EmployeeController.Empregados = new HashMap<>();
+                ControllerEmpregado.Empregados = new HashMap<>();
                 file = "database/Employee.txt";
                 break;
             case Unionized:
@@ -77,7 +77,7 @@ public class DBHandler {
                 file = "database/Payment.txt";
                 break;
             case PaymentDay:
-                PayrollController.PaymentDays = new ArrayList<>();
+                ControllerFolhaPagamento.PaymentDays = new ArrayList<>();
                 file = "database/PaymentDay.txt";
                 break;
             default:
