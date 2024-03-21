@@ -3,7 +3,7 @@ package br.ufal.ic.p2.wepayu.utils.Validator;
 import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
-import br.ufal.ic.p2.wepayu.controller.employee.ControllerEmpregado;
+import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumActiveTurn;
 
 public class ValidatorCartaoPontos {
@@ -12,10 +12,10 @@ public class ValidatorCartaoPontos {
             throws EmpregadoNaoExisteException, DateInvalideException, ExceptionGetEmpregado {
 
         // verifica se há algum empregado com o identificador passado
-        if (ControllerEmpregado.Empregados.containsKey(emp)) {
+        if (EmployeeController.Empregados.containsKey(emp)) {
 
             // como ele existe, é passado para a variavel tipo o tipo do empregado
-            String tipo = ControllerEmpregado.Empregados.get(emp).getTipo();
+            String tipo = EmployeeController.Empregados.get(emp).getTipo();
 
             // se ele for horista ele continua as validações.
             if (tipo.equals("horista")) {

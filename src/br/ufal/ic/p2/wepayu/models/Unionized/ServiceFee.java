@@ -5,11 +5,11 @@ import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 public class ServiceFee {
 
     private String date;
-    private float valor;
+    private float value;
 
-    public ServiceFee(String date, float valor) {
+    public ServiceFee(String date, float value) {
         this.date = date;
-        this.valor = valor;
+        this.value = value;
     }
 
     public String getDate() {
@@ -17,7 +17,7 @@ public class ServiceFee {
     }
 
     public String getValue() {
-        return Conversor.converterInvertedCharacter(String.format("%.2f", valor));
+        return Conversor.converterInvertedCharacter(String.format("%.2f", value));
     }
 
     @Override

@@ -3,9 +3,9 @@ package br.ufal.ic.p2.wepayu.controller.humanResources;
 import java.util.HashMap;
 
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
-import br.ufal.ic.p2.wepayu.controller.employee.ControllerEmpregado;
+import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.models.Payment.Payment;
-import br.ufal.ic.p2.wepayu.models.Payment.PagamentoEmBanco;
+import br.ufal.ic.p2.wepayu.models.Payment.PaymentInBank;
 import br.ufal.ic.p2.wepayu.models.Payment.PaymentInHands;
 import br.ufal.ic.p2.wepayu.models.Payment.PaymentInMail;
 
@@ -23,7 +23,7 @@ public class PaymentController {
                 // salva o metodo de pagamento
                 methodsPayment.put(employeeID, payment);
                 // vincula o metodo de pagamento ao cliente
-                ControllerEmpregado.Empregados.get(employeeID).setMethodPayment(payment);
+                EmployeeController.Empregados.get(employeeID).setMethodPayment(payment);
                 break;
             case "correios":
                 // cria o metodo de pagamento
@@ -31,7 +31,7 @@ public class PaymentController {
                 // salva o metodo de pagamento
                 methodsPayment.put(employeeID, payment);
                 // vincula o metodo de pagamento ao cliente
-                ControllerEmpregado.Empregados.get(employeeID).setMethodPayment(payment);
+                EmployeeController.Empregados.get(employeeID).setMethodPayment(payment);
                 break;
             default:
                 throw new ExceptionGetEmpregado("Metodo de pagamento invalido.");
@@ -39,20 +39,20 @@ public class PaymentController {
         methodsPayment.put(employeeID, payment);
     }
 
-    public static void MethodPayment(String employeeID, String method, String banco, String agencia,
-            String numeroConta) throws ExceptionGetEmpregado {
+    public static void MethodPayment(String employeeID, String method, String bank, String agency,
+            String accountNumber) throws ExceptionGetEmpregado {
 
         Payment payment;
         // verifica se os atributos foram enviados corretamente
-        validateatributo(method, banco, agencia, numeroConta);
+        validateAttribut(method, bank, agency, accountNumber);
 
         if (method.equals("banco")) {
             // cria o método de pagamento
-            payment = new PagamentoEmBanco(employeeID, method, banco, agencia, numeroConta);
+            payment = new PaymentInBank(employeeID, method, bank, agency, accountNumber);
             // salva o método de pagamento
             methodsPayment.put(employeeID, payment);
             // vincula o método de pagamento ao cliente
-            ControllerEmpregado.Empregados.get(employeeID).setMethodPayment(payment);
+            EmployeeController.Empregados.get(employeeID).setMethodPayment(payment);
 
         } else {
             throw new ExceptionGetEmpregado("Atributo nao existe.");
@@ -61,19 +61,19 @@ public class PaymentController {
         methodsPayment.put(employeeID, payment);
     }
 
-    private static void validateatributo(String method, String banco, String agencia, String numeroConta)
+    private static void validateAttribut(String method, String bank, String agency, String accountNumber)
             throws ExceptionGetEmpregado {
 
         if (method.isEmpty()) {
             throw new ExceptionGetEmpregado("Metodo de pagamento invalido.");
         }
-        if (banco.isEmpty()) {
+        if (bank.isEmpty()) {
             throw new ExceptionGetEmpregado("Banco nao pode ser nulo.");
         }
-        if (agencia.isEmpty()) {
+        if (agency.isEmpty()) {
             throw new ExceptionGetEmpregado("Agencia nao pode ser nulo.");
         }
-        if (numeroConta.isEmpty()) {
+        if (accountNumber.isEmpty()) {
             throw new ExceptionGetEmpregado("Conta corrente nao pode ser nulo.");
         }
 

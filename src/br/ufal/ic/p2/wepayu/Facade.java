@@ -3,10 +3,10 @@ package br.ufal.ic.p2.wepayu;
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.controller.employee.CardController;
-import br.ufal.ic.p2.wepayu.controller.employee.ControllerEmpregado;
-import br.ufal.ic.p2.wepayu.controller.employee.ControllerVenda;
+import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
+import br.ufal.ic.p2.wepayu.controller.employee.SaleController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
-import br.ufal.ic.p2.wepayu.controller.humanResources.ControllerFolhaPagamento;
+import br.ufal.ic.p2.wepayu.controller.humanResources.PayrollController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
 import br.ufal.ic.p2.wepayu.middleware.DBHandler;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
@@ -27,59 +27,58 @@ public class Facade {
         DBHandler.resetData(getEnumDatabase.Unionized);
         DBHandler.resetData(getEnumDatabase.Payment);
         DBHandler.resetData(getEnumDatabase.PaymentDay);
-        ControllerFolhaPagamento.resetPaymentDay();
+        PayrollController.resetPaymentDay();
     }
 
     public void encerrarSistema() throws Exception {
         /* Faz upload dos empregados criados */
-        DBHandler.uploadData(getEnumDatabase.Employee, ControllerEmpregado.Empregados);
+
+        DBHandler.uploadData(getEnumDatabase.Employee, EmployeeController.Empregados);
         DBHandler.uploadData(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
         DBHandler.uploadData(getEnumDatabase.Payment, PaymentController.methodsPayment);
-        DBHandler.uploadData(getEnumDatabase.PaymentDay, ControllerFolhaPagamento.PaymentDays);
+        DBHandler.uploadData(getEnumDatabase.PaymentDay, PayrollController.PaymentDays);
     }
 
-    public String criarEmpregado(String nome,
-                                 String endereco,
-                                 String tipo,
-                                 String salario)
+    public String criarEmpregado(String nome, String endereco, String tipo, String salario)
             throws Exception {
-        /* Cria empregado padrão */
-        return ControllerEmpregado.criarEmpregado(nome, endereco, tipo, salario);
+
+        return EmployeeController.criarEmpregado(nome, endereco, tipo, salario);
     }
 
-    public String criarEmpregado(String nome,
-                                 String endereco,
-                                 String tipo,
-                                 String salario,
-                                 String comissao)
+    public String criarEmpregado(String nome, String endereco, String tipo, String salario, String comissao)
             throws Exception {
-        /* Cria empregado comissionado */
-        return ControllerEmpregado.criarEmpregado(nome, endereco, tipo, salario, comissao);
+
+        return EmployeeController.criarEmpregado(nome, endereco, tipo, salario, comissao);
     }
 
     public String getAtributoEmpregado(String emp, String atributo)
             throws Exception {
-        return ControllerEmpregado.getAtributo(emp, atributo);
+
+        return EmployeeController.getAtributo(emp, atributo);
     }
 
-    public String getEmpregadoPorNome(String nome, int indice)
-            throws Exception {
-        /* Para dado índice (n), temos empregado (n - 1) */
-        return ControllerEmpregado.getEmpregadoPorNome(nome, indice - 1);
+    public String getEmpregadoPorNome(String nome, int indice) throws Exception {
+        // como o usuário está buscando os empregados pelo nome o indice significa a
+        // posição dele
+        // está e n-1 sendo n o indice buscado
+
+        return EmployeeController.getEmpregadoPorNome(nome, indice - 1);
     }
 
     public void removerEmpregado(String emp)
             throws Exception {
-        ControllerEmpregado.removerEmpregado(emp);
+        EmployeeController.removerEmpregado(emp);
     }
 
     public void lancaCartao(String emp, String data, String hora)
             throws Exception {
+
         CardController.lancaCartao(emp, data, hora);
     }
 
     public String getHorasNormaisTrabalhadas(String emp, String dataInicio, String dataFinal)
             throws Exception {
+
         return CardController.getHoras(emp, "normal", dataInicio, dataFinal);
     }
 
@@ -88,72 +87,68 @@ public class Facade {
         return CardController.getHoras(emp, "extra", dataInicio, dataFinal);
     }
 
-    public void lancaVenda(String emp, String date, String valor)
+    public void lancaVenda(String emp, String date, String value)
             throws Exception {
-        ControllerVenda.registerSale(emp, date, valor);
+
+        SaleController.registerSale(emp, date, value);
     }
 
-    public String getVendasRealizadas(String emp, String dataInicial, String prazo)
+    public String getVendasRealizadas(String emp, String dateInitial, String deadline)
             throws Exception {
-        return ControllerVenda.sumOfSalesAmount(emp, dataInicial, prazo);
+
+        return SaleController.sumOfSalesAmount(emp, dateInitial, deadline);
     }
 
-    public void alteraEmpregado(String emp,
-                                String atributo,
-                                String valor,
-                                String IDsindicalizado,
-                                String taxaSindicato)
+    public void alteraEmpregado(String emp, String attribut, String value, String unionizedID, String unionFee)
             throws Exception {
-        /* Altera empregado sindicalizado */
+
         if (emp.isEmpty()) {
             throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
-        } else if (!ControllerEmpregado.Empregados.containsKey(emp)) {
+        } else if (!EmployeeController.Empregados.containsKey(emp)) {
             throw new EmpregadoNaoExisteException();
         }
-        ControllerEmpregado.setEmployee(emp, atributo, valor, IDsindicalizado, taxaSindicato);
+
+        EmployeeController.setEmployee(emp, attribut, value, unionizedID, unionFee);
     }
 
-    public void alteraEmpregado(String emp, String atributo, String valor)
+    public void alteraEmpregado(String emp, String attribut, String value)
             throws Exception {
-        /* Altera empregado padrão */
-        ControllerEmpregado.setEmployee(emp, atributo, valor);
+
+        EmployeeController.setEmployee(emp, attribut, value);
     }
 
-    public void alteraEmpregado(String emp,
-                                String atributo,
-                                String valor,
-                                String banco,
-                                String agencia,
-                                String numeroConta) throws Exception {
-        /* Altera empregado com conta bancária */
-        ControllerEmpregado.setEmployee(emp, atributo, valor, banco, agencia, numeroConta);
+    public void alteraEmpregado(String emp, String attribut, String value, String bank, String agency,
+            String accountNumber) throws Exception {
+
+        EmployeeController.setEmployee(emp, attribut, value, bank, agency, accountNumber);
     }
 
-    public void alteraEmpregado(String emp,
-                                String atributo,
-                                String valor,
-                                String commission)
+    public void alteraEmpregado(String emp, String attribut, String value, String commission)
             throws Exception {
-        /* Altera empregado comissionado */
-        ControllerEmpregado.setEmployee(emp, atributo, valor, commission);
+
+        EmployeeController.setEmployee(emp, attribut, value, commission);
     }
 
-    public String getTaxasServico(String emp, String dataInicial, String prazo)
+    public String getTaxasServico(String emp, String dateInitial, String deadline)
             throws Exception {
-        return UnionServiceController.getServiceFee(emp, dataInicial, prazo);
+
+        return UnionServiceController.getServiceFee(emp, dateInitial, deadline);
     }
 
-    public void lancaTaxaServico(String IDsindicalizado, String date, String valor)
+    public void lancaTaxaServico(String unionizedID, String date, String value)
             throws Exception {
-        UnionServiceController.createServiceFee(IDsindicalizado, date, valor);
+
+        UnionServiceController.createServiceFee(unionizedID, date, value);
     }
 
     public String totalFolha(String date)
             throws Exception {
-        return ControllerFolhaPagamento.totalPayroll(date);
+
+        return PayrollController.totalPayroll(date);
     }
 
     public void criarAgendaDePagamentos(String descricao) throws Exception {
-        ControllerFolhaPagamento.createPaymentDay(descricao);
+        PayrollController.createPaymentDay(descricao);
     }
+
 }

@@ -38,7 +38,7 @@ public class Validator {
                     switch (tipo) {
                         case InitialDate:
                             throw new DateInvalideException("Data inicial invalida.");
-                        case prazo:
+                        case DeadLine:
                             throw new DateInvalideException("Data final invalida.");
                         case Default:
                             throw new DateInvalideException("Data invalida.");
@@ -58,7 +58,7 @@ public class Validator {
                 case InitialDate:
                     // se ocorrer erro na conversão lança o erro data invalida.
                     throw new DateInvalideException("Data inicial invalida.");
-                case prazo:
+                case DeadLine:
                     // se ocorrer erro na conversão lança o erro data invalida.
                     throw new DateInvalideException("Data final invalida.");
 
@@ -108,28 +108,28 @@ public class Validator {
         }
     }
 
-    public static Boolean validatorRangeDate(LocalDate startDate, LocalDate dateVerific, LocalDate prazo) {
+    public static Boolean validatorRangeDate(LocalDate startDate, LocalDate dateVerific, LocalDate deadline) {
 
         if (dateVerific.getDayOfYear() >= startDate.getDayOfYear()
                 && dateVerific.getYear() == startDate.getYear()
-                && dateVerific.getDayOfYear() < prazo.getDayOfYear()
-                && dateVerific.getYear() == prazo.getYear()) {
+                && dateVerific.getDayOfYear() < deadline.getDayOfYear()
+                && dateVerific.getYear() == deadline.getYear()) {
 
             return true;
         }
         return false;
     }
 
-    public static void validateSearchDate(String dataInicial, String prazo) throws DateInvalideException {
+    public static void validateSearchDate(String dateInitial, String deadline) throws DateInvalideException {
 
-        Validator.validatorDate(dataInicial, getEnumActiveTurn.InitialDate);
-        Validator.validatorDate(prazo, getEnumActiveTurn.prazo);
+        Validator.validatorDate(dateInitial, getEnumActiveTurn.InitialDate);
+        Validator.validatorDate(deadline, getEnumActiveTurn.DeadLine);
 
         LocalDate startDate = null, dateFinal = null;
 
         // converte as datas para moder ser manipulada
-        startDate = Conversor.converterDate(dataInicial, 1);
-        dateFinal = Conversor.converterDate(prazo, 2);
+        startDate = Conversor.converterDate(dateInitial, 1);
+        dateFinal = Conversor.converterDate(deadline, 2);
 
         // verifica se a data inicial é maior que a data final
         if (startDate.getDayOfYear() > dateFinal.getDayOfYear()

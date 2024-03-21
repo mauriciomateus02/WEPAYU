@@ -23,7 +23,7 @@ public class CardController {
         // valida os campos retornados para poder encontrar exceções
         ValidatorCartaoPontos.validarCartao(emp, data, hora);
 
-        EmpregadoHorista empregado = (EmpregadoHorista) ControllerEmpregado.Empregados.get(emp);
+        EmpregadoHorista empregado = (EmpregadoHorista) EmployeeController.Empregados.get(emp);
 
         if (hora.contains(",")) {
             hora = Conversor.converterInvertedCharacter(hora);
@@ -34,7 +34,7 @@ public class CardController {
             empregado.addCartaoPontos(card);
         }
 
-        ControllerEmpregado.Empregados.put(emp, empregado);
+        EmployeeController.Empregados.put(emp, empregado);
     }
 
     public static String getHoras(String emp, String tipoHora, String dataInicio, String dataFinal)
@@ -47,15 +47,15 @@ public class CardController {
 
         Validator.validateSearchDate(dataInicio, dataFinal);
 
-        if (ControllerEmpregado.Empregados.containsKey(emp)) {
+        if (EmployeeController.Empregados.containsKey(emp)) {
 
-            String tipo = ControllerEmpregado.Empregados.get(emp).getTipo();
+            String tipo = EmployeeController.Empregados.get(emp).getTipo();
 
             // se o empregado existir na base de dados mas não foi cadastrado nada
             // retornará 0;
             if (tipo.equals("horista")) {
 
-                EmpregadoHorista empregado = (EmpregadoHorista) ControllerEmpregado.Empregados.get(emp);
+                EmpregadoHorista empregado = (EmpregadoHorista) EmployeeController.Empregados.get(emp);
 
                 if (empregado.getCartaoPontos().size() == 0) {
                     return Integer.toString(0);
@@ -63,12 +63,12 @@ public class CardController {
 
                 else {
 
-                    float valor = 0, extra = 0;
-                    LocalDate prazo = null, dateVerific = null, startDate = null;
-                    String valorConvertido;
+                    float value = 0, extra = 0;
+                    LocalDate deadline = null, dateVerific = null, startDate = null;
+                    String valueConvertido;
 
                     // converte a string em data para ser analisada.
-                    prazo = Conversor.converterDate(dataFinal, 2);
+                    deadline = Conversor.converterDate(dataFinal, 2);
                     startDate = Conversor.converterDate(dataInicio, 1);
 
                     for (CartaoPontos card : empregado.getCartaoPontos()) {
@@ -81,14 +81,14 @@ public class CardController {
                         // e a data verificada estiver no range de data inicio e data final
                         if (dateVerific.getDayOfYear() >= startDate.getDayOfYear()
                                 && dateVerific.getYear() == startDate.getYear()
-                                && dateVerific.getDayOfYear() < prazo.getDayOfYear()
-                                && dateVerific.getYear() == prazo.getYear()) {
+                                && dateVerific.getDayOfYear() < deadline.getDayOfYear()
+                                && dateVerific.getYear() == deadline.getYear()) {
 
                             if (card.gethoras() >= 8) {
-                                valor += 8;
+                                value += 8;
                                 extra += (card.gethoras() - 8);
                             } else {
-                                valor += card.gethoras();
+                                value += card.gethoras();
                             }
                         }
 
@@ -101,18 +101,18 @@ public class CardController {
                     // após a contagem das horas o valor é convertido
                     if (tipoHora.equals("normal")) {
 
-                        valorConvertido = Conversor.converterCharacter(Float.toString(valor));
+                        valueConvertido = Conversor.converterCharacter(Float.toString(value));
                     } else {
-                        valorConvertido = Conversor.converterCharacter(Float.toString(extra));
+                        valueConvertido = Conversor.converterCharacter(Float.toString(extra));
                     }
                     // se o valor conter ,0 significa que é um valor inteiro e será dividido
-                    if (valorConvertido.contains(",0")) {
+                    if (valueConvertido.contains(",0")) {
                         // divide na virgula
-                        String sttrs[] = valorConvertido.split(",");
+                        String sttrs[] = valueConvertido.split(",");
                         // retorna
                         return sttrs[0];
                     } else {
-                        return valorConvertido;
+                        return valueConvertido;
                     }
                 }
 

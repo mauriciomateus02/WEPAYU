@@ -4,16 +4,16 @@ import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 
 public class Sale {
     private String date;
-    private float valor;
+    private float value;
 
-    public Sale(String date, float valor) {
+    public Sale(String date, float value) {
         this.date = date;
-        this.valor = valor;
+        this.value = value;
     }
 
     public String getValue() {
 
-        return Conversor.converterInvertedCharacter(String.format("%.2f", valor));
+        return Conversor.converterInvertedCharacter(String.format("%.2f", value));
 
     }
 
