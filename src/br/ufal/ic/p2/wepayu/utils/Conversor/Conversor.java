@@ -173,4 +173,19 @@ public class Conversor {
         }
     }
 
+    public static String padRightWithSpaces(String input, int length) {
+        StringBuilder builder = new StringBuilder(input);
+        while (builder.length() < length) {
+            builder.append(' ');
+        }
+        return builder.toString();
+    }
+
+    public static String padLeftWithSpaces(String input, int length) {
+        StringBuilder builder = new StringBuilder();
+        while (builder.length() + input.length() < length) {
+            builder.append(' '); // Adiciona espaços em branco antes da string original
+        }
+        return builder.toString() + input;
+    }
 }

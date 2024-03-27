@@ -1,11 +1,7 @@
-package br.ufal.ic.p2.wepayu.utils;
+package br.ufal.ic.p2.wepayu.models.Payroll;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.WeekFields;
-import java.util.Locale;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 
@@ -21,10 +17,13 @@ import br.ufal.ic.p2.wepayu.models.Employee.Hourly.EmpregadoHorista;
 import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumActiveTurn;
 import br.ufal.ic.p2.wepayu.utils.Validator.Validator;
+import br.ufal.ic.p2.wepayu.utils.Validator.ValidatorDatePayroll;
 
-public class Payroll {
+public class TotalPayroll {
 
-	public static String TotalPayroll(String date)
+	private String payroll;
+
+	public TotalPayroll(String date)
 			throws DateInvalideException, ExceptionGetEmpregado, DataFormatException,
 			EmpregadoNaoExisteException {
 
@@ -36,24 +35,19 @@ public class Payroll {
 			LocalDate contraction = LocalDate.of(2005, 1, 1);
 
 			float totalPayroll = 0;
-			String salary = "";
 
 			Long check = ChronoUnit.WEEKS.between(contraction, dateVerific);
 
 			for (Map.Entry<String, Employee> entry : EmployeeController.Empregados.entrySet()) {
 				Employee emp = entry.getValue();
 
-				int[] day = getPaymentEmployee(emp.getPaymentDay(), dateVerific);
+				int[] day = ValidatorDatePayroll.getPaymentEmployee(emp.getPaymentDay(), dateVerific);
 
-				if (emp.getPaymentDay().contains("mensal") && checkEmployee(day[1], dateVerific)) {
+				if (emp.getPaymentDay().contains("mensal")
+						&& ValidatorDatePayroll.getPaymentMonth(day[1], dateVerific)) {
 					if (emp.getTipo().equals("assalariado")) {
-						salary = Conversor.converterInvertedCharacter(emp.getSalario());
 
-						Double salarioAmount = Double.parseDouble(salary);
-
-						salarioAmount = ((int) (salarioAmount * 100)) / 100.0d;
-
-						totalPayroll += salarioAmount;
+						totalPayroll += salaried(emp, 0);
 					}
 					if (emp.getTipo().equals("comissionado")) {
 
@@ -65,17 +59,12 @@ public class Payroll {
 						totalPayroll += total;
 					}
 				} else if (emp.getPaymentDay().contains("semanal")
-						&& checkEmployee(check + 1, day[0], day[1], dateVerific)) {
+						&& ValidatorDatePayroll.getPaymentWeek(check + 1, day[0], day[1], dateVerific)) {
+
 					if (emp.getTipo().equals("assalariado")) {
-						salary = Conversor.converterInvertedCharacter(emp.getSalario());
 
-						Double salarioAmount = Double.parseDouble(salary);
 						double dividendo = (double) day[2];
-
-						salarioAmount = Math.floor((salarioAmount * (dividendo / 52D)) * 2D * 100) / 100F;
-						salarioAmount = ((int) (salarioAmount * 100)) / 100.0d;
-
-						totalPayroll += salarioAmount;
+						totalPayroll += salaried(emp, dividendo);
 					}
 
 					if (emp.getTipo().equals("comissionado")) {
@@ -91,85 +80,13 @@ public class Payroll {
 				}
 
 			}
-			return String.format("%.2f", totalPayroll);
+			payroll = String.format("%.2f", totalPayroll);
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 
-	private static int[] getPaymentEmployee(String pay, LocalDate date) {
-
-		String[] paymentDay = pay.split(" ");
-		int[] aux = new int[3];
-
-		if (paymentDay[0].equals("mensal")) {
-
-			aux[0] = date.lengthOfMonth() - 1;
-
-			if (paymentDay[1].equals("$"))
-				aux[1] = date.lengthOfMonth();
-			else
-				aux[1] = Integer.parseInt(paymentDay[1]);
-			aux[2] = 24;
-			return aux;
-		} else {
-			if (paymentDay.length == 2) {
-				aux[0] = 1;
-				aux[1] = Integer.parseInt(paymentDay[1]);
-				aux[2] = 6;
-				return aux;
-			} else {
-				aux[0] = Integer.parseInt(paymentDay[1]);
-				aux[1] = Integer.parseInt(paymentDay[2]);
-				aux[2] = Integer.parseInt(paymentDay[1]) * 6;
-
-				return aux;
-			}
-		}
-	}
-
-	private static Boolean checkEmployee(Long check, int week, int dayWeek, LocalDate dateVerific) {
-		if (week == 1 && (check % week == 0 && dateVerific.getDayOfWeek() == dayWeek(dayWeek))) {
-			return true;
-		} else if (week > 1 && ((check % ((week)) == 0 && dateVerific.getDayOfWeek() == dayWeek(dayWeek))
-				|| ((check) % ((week)) == 0 && dateVerific.getDayOfWeek() == dayWeek(dayWeek)))) {
-
-			return true;
-		}
-		return false;
-	}
-
-	private static Boolean checkEmployee(int day, LocalDate dateVerific) {
-		if (dateVerific.getDayOfMonth() == day) {
-
-			return true;
-		}
-		return false;
-	}
-
-	private static DayOfWeek dayWeek(int day) {
-		switch (day) {
-			case 1:
-				return DayOfWeek.MONDAY;
-			case 2:
-				return DayOfWeek.TUESDAY;
-			case 3:
-				return DayOfWeek.WEDNESDAY;
-			case 4:
-				return DayOfWeek.THURSDAY;
-			case 5:
-				return DayOfWeek.FRIDAY;
-			case 6:
-				return DayOfWeek.SATURDAY;
-			case 7:
-				return DayOfWeek.SUNDAY;
-			default:
-				return null;
-
-		}
-	}
-
-	private static double commissoned(String key, Employee emp, LocalDate dateVerific, int[] day)
+	public double commissoned(String key, Employee emp, LocalDate dateVerific, int[] day)
 			throws DateInvalideException, ExceptionGetEmpregado {
 
 		EmpregadoComissionado employee = (EmpregadoComissionado) emp;
@@ -208,8 +125,9 @@ public class Payroll {
 		return salarioAmount + commissionAmount;
 	}
 
-	private static double hourly(String key, Employee emp, LocalDate dateVerific, int[] day)
+	public double hourly(String key, Employee emp, LocalDate dateVerific, int[] day)
 			throws ExceptionGetEmpregado, DataFormatException, DateInvalideException, EmpregadoNaoExisteException {
+
 		EmpregadoHorista employee = (EmpregadoHorista) emp;
 		LocalDate startDate;
 		double totalPayroll = 0.0;
@@ -245,5 +163,20 @@ public class Payroll {
 		totalPayroll += Float.parseFloat(value) * (Float.parseFloat(salary) * 1.5);
 
 		return totalPayroll;
+	}
+
+	public double salaried(Employee emp, double dividendo) {
+		String salary = Conversor.converterInvertedCharacter(emp.getSalario());
+
+		Double salarioAmount = Double.parseDouble(salary);
+		if (dividendo > 0)
+			salarioAmount = Math.floor((salarioAmount * (dividendo / 52D)) * 2D * 100) / 100F;
+		salarioAmount = ((int) (salarioAmount * 100)) / 100.0d;
+
+		return salarioAmount;
+	}
+
+	public String getPayroll() {
+		return payroll;
 	}
 }

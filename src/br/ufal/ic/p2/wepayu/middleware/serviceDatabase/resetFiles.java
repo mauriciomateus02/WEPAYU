@@ -1,4 +1,4 @@
-package br.ufal.ic.p2.wepayu.middleware.serviceDatabese;
+package br.ufal.ic.p2.wepayu.middleware.serviceDatabase;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;

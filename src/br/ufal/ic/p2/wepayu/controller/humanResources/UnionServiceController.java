@@ -124,11 +124,12 @@ public class UnionServiceController {
                     // transforma e soma o valor buscado
                     value += Float.parseFloat(service.getValue());
                 }
+
             }
         }
 
         String value_as_string = String.format("%.2f", value);
-        return Conversor.converterCharacter(value_as_string);
+        return value_as_string;
         // Valor formatado em duas casas decimais e retornado como string com vírgula
     }
 

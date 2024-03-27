@@ -1,7 +1,5 @@
 package br.ufal.ic.p2.wepayu;
 
-import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
-import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
 import br.ufal.ic.p2.wepayu.controller.employee.CardController;
 import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.controller.employee.SaleController;
@@ -102,12 +100,6 @@ public class Facade {
     public void alteraEmpregado(String emp, String attribut, String value, String unionizedID, String unionFee)
             throws Exception {
 
-        if (emp.isEmpty()) {
-            throw new ExceptionGetEmpregado("Identificacao do empregado nao pode ser nula.");
-        } else if (!EmployeeController.Empregados.containsKey(emp)) {
-            throw new EmpregadoNaoExisteException();
-        }
-
         EmployeeController.setEmployee(emp, attribut, value, unionizedID, unionFee);
     }
 
@@ -151,4 +143,8 @@ public class Facade {
         PayrollController.createPaymentDay(descricao);
     }
 
+    public void rodaFolha(String data, String saida) throws Exception {
+
+        PayrollController.generatePayroll(saida, data);
+    }
 }

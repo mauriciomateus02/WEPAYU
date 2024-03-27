@@ -44,5 +44,4 @@ public class EmpregadoHorista extends Employee {
     public void setSalario(float salario) {
         this.salarioHora = salario;
     }
-
 }

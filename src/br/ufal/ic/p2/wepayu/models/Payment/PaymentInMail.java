@@ -4,7 +4,6 @@ public class PaymentInMail extends Payment {
 
     public PaymentInMail(String employeeID, String name) {
         super(employeeID, name);
-
     }
 
     @Override
@@ -14,7 +13,7 @@ public class PaymentInMail extends Payment {
 
     @Override
     public String toString() {
-        return getEmployeeID() + ";" + getName();
+        return getEmployeeID() + ";" + getName() + ";";
     }
 
 }

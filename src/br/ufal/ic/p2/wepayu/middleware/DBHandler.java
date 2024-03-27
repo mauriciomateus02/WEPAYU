@@ -11,10 +11,10 @@ import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PayrollController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
-import br.ufal.ic.p2.wepayu.middleware.serviceDatabese.PushFiles;
-import br.ufal.ic.p2.wepayu.middleware.serviceDatabese.getFiles;
-import br.ufal.ic.p2.wepayu.middleware.serviceDatabese.removeLine;
-import br.ufal.ic.p2.wepayu.middleware.serviceDatabese.resetFiles;
+import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.GetFiles;
+import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.PushFiles;
+import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.removeLine;
+import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.resetFiles;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
 
 public class DBHandler {
@@ -24,6 +24,7 @@ public class DBHandler {
     public static void getData(getEnumDatabase type)
             throws FileNotFoundException {
 
+        GetFiles getFiles = new GetFiles();
         searchDatabase(type);
 
         getFiles.getEntites(file);
@@ -38,6 +39,7 @@ public class DBHandler {
 
         selectDatabase(type);
         PushFiles.uploadData(file, map);
+
     }
 
     public static void uploadData(getEnumDatabase type, ArrayList<String> list) throws ExceptionCreatePaymentDay {
@@ -63,6 +65,7 @@ public class DBHandler {
     }
 
     private static void searchDatabase(getEnumDatabase type) {
+
         switch (type) {
             case Employee:
                 EmployeeController.Empregados = new HashMap<>();
@@ -87,6 +90,7 @@ public class DBHandler {
     }
 
     private static void selectDatabase(getEnumDatabase type) {
+
         switch (type) {
             case Employee:
                 file = "database/Employee.txt";

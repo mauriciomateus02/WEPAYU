@@ -156,8 +156,8 @@ expect 0,00 totalFolha data=4/1/2005
 expect 0,00 totalFolha data=5/1/2005
 expect 0,00 totalFolha data=6/1/2005
 expect 748,53 totalFolha data=7/1/2005
-#rodaFolha data=7/1/2005 saida=folha-2005-01-07.txt
-#equalFiles file1=ok/folha-2005-01-07.txt file2=folha-2005-01-07.txt
+rodaFolha data=7/1/2005 saida=folha-2005-01-07.txt
+equalFiles file1=ok/folha-2005-01-07.txt file2=folha-2005-01-07.txt
 expect 0,00 totalFolha data=8/1/2005
 expect 0,00 totalFolha data=9/1/2005
 expect 0,00 totalFolha data=10/1/2005
@@ -165,8 +165,8 @@ expect 0,00 totalFolha data=11/1/2005
 expect 0,00 totalFolha data=12/1/2005
 expect 0,00 totalFolha data=13/1/2005
 expect 2803,04 totalFolha data=14/1/2005
-#rodaFolha data=14/1/2005 saida=folha-2005-01-14.txt
-#equalFiles file1=ok/folha-2005-01-14.txt file2=folha-2005-01-14.txt
+rodaFolha data=14/1/2005 saida=folha-2005-01-14.txt
+equalFiles file1=ok/folha-2005-01-14.txt file2=folha-2005-01-14.txt
 expect 0,00 totalFolha data=15/1/2005
 expect 0,00 totalFolha data=16/1/2005
 expect 0,00 totalFolha data=17/1/2005
@@ -174,8 +174,8 @@ expect 0,00 totalFolha data=18/1/2005
 expect 0,00 totalFolha data=19/1/2005
 expect 0,00 totalFolha data=20/1/2005
 expect 0,00 totalFolha data=21/1/2005
-#rodaFolha data=21/1/2005 saida=folha-2005-01-21.txt
-#equalFiles file1=ok/folha-2005-01-21.txt file2=folha-2005-01-21.txt
+rodaFolha data=21/1/2005 saida=folha-2005-01-21.txt
+equalFiles file1=ok/folha-2005-01-21.txt file2=folha-2005-01-21.txt
 expect 0,00 totalFolha data=22/1/2005
 expect 0,00 totalFolha data=23/1/2005
 expect 0,00 totalFolha data=24/1/2005
@@ -183,18 +183,18 @@ expect 0,00 totalFolha data=25/1/2005
 expect 0,00 totalFolha data=26/1/2005
 expect 0,00 totalFolha data=27/1/2005
 expect 2676,91 totalFolha data=28/1/2005
-#rodaFolha data=28/1/2005 saida=folha-2005-01-28.txt
-#equalFiles file1=ok/folha-2005-01-28.txt file2=folha-2005-01-28.txt
+rodaFolha data=28/1/2005 saida=folha-2005-01-28.txt
+equalFiles file1=ok/folha-2005-01-28.txt file2=folha-2005-01-28.txt
 expect 0,00 totalFolha data=29/1/2005
 expect 0,00 totalFolha data=30/1/2005
 expect 3300,00 totalFolha data=31/1/2005
-#rodaFolha data=31/1/2005 saida=folha-2005-01-31.txt
+rodaFolha data=31/1/2005 saida=folha-2005-01-31.txt
 #equalFiles file1=ok/folha-2005-01-31.txt file2=folha-2005-01-31.txt
 expect 0,00 totalFolha data=1/2/2005
 expect 0,00 totalFolha data=2/2/2005
 expect 0,00 totalFolha data=3/2/2005
 expect 651,90 totalFolha data=4/2/2005
-#rodaFolha data=4/2/2005 saida=folha-2005-02-04.txt
+rodaFolha data=4/2/2005 saida=folha-2005-02-04.txt
 #equalFiles file1=ok/folha-2005-02-04.txt file2=folha-2005-02-04.txt
 expect 0,00 totalFolha data=5/2/2005
 expect 0,00 totalFolha data=6/2/2005
@@ -203,7 +203,7 @@ expect 0,00 totalFolha data=8/2/2005
 expect 0,00 totalFolha data=9/2/2005
 expect 0,00 totalFolha data=10/2/2005
 expect 2919,91 totalFolha data=11/2/2005
-#rodaFolha data=11/2/2005 saida=folha-2005-02-11.txt
+rodaFolha data=11/2/2005 saida=folha-2005-02-11.txt
 #equalFiles file1=ok/folha-2005-02-11.txt file2=folha-2005-02-11.txt
 expect 0,00 totalFolha data=12/2/2005
 expect 0,00 totalFolha data=13/2/2005
@@ -212,8 +212,8 @@ expect 0,00 totalFolha data=15/2/2005
 expect 0,00 totalFolha data=16/2/2005
 expect 0,00 totalFolha data=17/2/2005
 expect 0,00 totalFolha data=18/2/2005
-#rodaFolha data=18/2/2005 saida=folha-2005-02-18.txt
-#equalFiles file1=ok/folha-2005-02-18.txt file2=folha-2005-02-18.txt
+rodaFolha data=18/2/2005 saida=folha-2005-02-18.txt
+equalFiles file1=ok/folha-2005-02-18.txt file2=folha-2005-02-18.txt
 expect 0,00 totalFolha data=19/2/2005
 expect 0,00 totalFolha data=20/2/2005
 expect 0,00 totalFolha data=21/2/2005
@@ -221,16 +221,16 @@ expect 0,00 totalFolha data=22/2/2005
 expect 0,00 totalFolha data=23/2/2005
 expect 0,00 totalFolha data=24/2/2005
 expect 2676,91 totalFolha data=25/2/2005
-#rodaFolha data=25/2/2005 saida=folha-2005-02-25.txt
-#equalFiles file1=ok/folha-2005-02-25.txt file2=folha-2005-02-25.txt
+rodaFolha data=25/2/2005 saida=folha-2005-02-25.txt
+equalFiles file1=ok/folha-2005-02-25.txt file2=folha-2005-02-25.txt
 expect 0,00 totalFolha data=26/2/2005
 expect 0,00 totalFolha data=27/2/2005
 expect 3300,00 totalFolha data=28/2/2005
 # rodar a folha duas vezes deve dar o mesmo resultado
-#rodaFolha data=28/2/2005 saida=folha-2005-02-28.txt
-#equalFiles file1=ok/folha-2005-02-28.txt file2=folha-2005-02-28.txt
-#rodaFolha data=28/2/2005 saida=folha-2005-02-28.txt
-#equalFiles file1=ok/folha-2005-02-28.txt file2=folha-2005-02-28.txt
+rodaFolha data=28/2/2005 saida=folha-2005-02-28.txt
+equalFiles file1=ok/folha-2005-02-28.txt file2=folha-2005-02-28.txt
+rodaFolha data=28/2/2005 saida=folha-2005-02-28.txt
+equalFiles file1=ok/folha-2005-02-28.txt file2=folha-2005-02-28.txt
 
 # Outros testes que estamos ignorando:
 #    situacao quando o empregado acabou de ser contratado e deve receber parcialmente na primeira folha

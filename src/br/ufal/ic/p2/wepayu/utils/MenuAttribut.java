@@ -110,8 +110,11 @@ public class MenuAttribut {
 
             case "sindicalizado":
                 if (value.equals("true") || value.equals("false")) {
+                    if (value.equals("false")) {
 
-                    emp.setSindicalizado(Boolean.parseBoolean(value));
+                        // UnionServiceController.employeesUnionzed.remove(emp.getUnionized().getUnionizedID());
+                        emp.setSindicalizado(Boolean.parseBoolean(value));
+                    }
 
                 } else
                     throw new ExceptionGetEmpregado("Valor deve ser true ou false.");

@@ -4,10 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
-import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
-import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
-import br.ufal.ic.p2.wepayu.Exception.ExceptionRemoveEmpregado;
+import br.ufal.ic.p2.wepayu.Exception.*;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
 import br.ufal.ic.p2.wepayu.middleware.DBHandler;
 import br.ufal.ic.p2.wepayu.models.Employee.Employee;

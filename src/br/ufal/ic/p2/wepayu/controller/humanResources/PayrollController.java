@@ -1,20 +1,18 @@
 package br.ufal.ic.p2.wepayu.controller.humanResources;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.zip.DataFormatException;
 
-import br.ufal.ic.p2.wepayu.Exception.DateInvalideException;
-import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
-import br.ufal.ic.p2.wepayu.Exception.ExceptionCreatePaymentDay;
-import br.ufal.ic.p2.wepayu.Exception.ExceptionGetEmpregado;
-// import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
-// import br.ufal.ic.p2.wepayu.models.Employee.Employee;
-import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
-import br.ufal.ic.p2.wepayu.utils.Payroll;
+import br.ufal.ic.p2.wepayu.Exception.*;
+import br.ufal.ic.p2.wepayu.models.Payroll.Payroll;
+import br.ufal.ic.p2.wepayu.models.Payroll.TotalPayroll;
 
 public class PayrollController {
 
     public static ArrayList<String> PaymentDays;
+    public static HashMap<String, ArrayList<String>> PaymentDay;
 
     public static String totalPayroll(String data)
             throws ExceptionGetEmpregado, DateInvalideException, DataFormatException, EmpregadoNaoExisteException {
@@ -22,14 +20,9 @@ public class PayrollController {
         if (data.isEmpty())
             throw new ExceptionGetEmpregado("Data deve ser nao nulo.");
 
-        return Conversor.converterCharacter(Payroll.TotalPayroll(data));
+        TotalPayroll totalPay = new TotalPayroll(data);
+        return totalPay.getPayroll();
     }
-
-    // public static void getPayroll(String emp, String date) {
-    // // pega o empregado que será analisado
-    // Employee employee = EmployeeController.Empregados.get(emp);
-
-    // }
 
     public static void createPaymentDay(String day) throws ExceptionCreatePaymentDay {
         if (day.isEmpty()) {
@@ -91,9 +84,20 @@ public class PayrollController {
     }
 
     public static void resetPaymentDay() {
+
         PaymentDays.add("semanal 5");
         PaymentDays.add("mensal $");
         PaymentDays.add("semanal 2 5");
+
+    }
+
+    public static void generatePayroll(String outfile, String deadline)
+            throws DateInvalideException, FileNotFoundException, ExceptionGetEmpregado, DataFormatException,
+            EmpregadoNaoExisteException {
+
+        Payroll payroll = new Payroll();
+
+        payroll.generatePayroll(outfile, deadline);
 
     }
 

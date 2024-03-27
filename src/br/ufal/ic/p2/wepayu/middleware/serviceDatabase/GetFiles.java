@@ -1,13 +1,15 @@
-package br.ufal.ic.p2.wepayu.middleware.serviceDatabese;
+package br.ufal.ic.p2.wepayu.middleware.serviceDatabase;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-public class getFiles {
+public class GetFiles {
 
-    public static void getEntites(String file)
+    public void getEntites(String file)
             throws FileNotFoundException {
+
+        ValidatorOfEntity validatorOfEntity = new ValidatorOfEntity();
 
         try {
 
@@ -16,7 +18,8 @@ public class getFiles {
 
             while ((linha = reader.readLine()) != null) {
 
-                ValidatorOfEntity.setEntities(linha);
+                validatorOfEntity.setEntities(linha);
+
             }
             // verifica se a requisição de pegar os dados de do tipo employee
             reader.close();
