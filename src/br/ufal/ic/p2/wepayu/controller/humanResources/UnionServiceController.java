@@ -129,7 +129,7 @@ public class UnionServiceController {
         }
 
         String value_as_string = String.format("%.2f", value);
-        return value_as_string;
+        return Conversor.converterCharacter(value_as_string);
         // Valor formatado em duas casas decimais e retornado como string com vírgula
     }
 
