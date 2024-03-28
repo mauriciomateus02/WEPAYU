@@ -19,6 +19,7 @@ public class DataRetriever {
 
             EmpregadoHorista empHourly = new EmpregadoHorista(empDTO.getName(), empDTO.getAddress(), empDTO.getType(),
                     empDTO.getSalary());
+            empHourly.setSindicalizado(Boolean.parseBoolean(empDTO.getUnionized()));
 
             // informa se o empregado é sindicalizado ou não.
 
@@ -40,6 +41,7 @@ public class DataRetriever {
 
             EmpregadoComissionado empCommissioned = new EmpregadoComissionado(empDTO.getName(), empDTO.getAddress(),
                     empDTO.getType(), empDTO.getSalary(), empDTO.getCommission());
+            empCommissioned.setSindicalizado(Boolean.parseBoolean(empDTO.getUnionized()));
 
             if (empDTO.getList() != null) {
                 for (String cardPoint : empDTO.getList()) {
@@ -57,6 +59,8 @@ public class DataRetriever {
         } else if (empDTO.getType().equals("assalariado")) {
             EmpregadoAssalariado empSalaried = new EmpregadoAssalariado(empDTO.getName(), empDTO.getAddress(),
                     empDTO.getType(), empDTO.getSalary());
+
+            empSalaried.setSindicalizado(Boolean.parseBoolean(empDTO.getUnionized()));
             empSalaried.setPaymentDay(empDTO.getPaymentDay());
             EmployeeController.Empregados.put(empDTO.getIndex(), empSalaried);
         }
@@ -81,8 +85,10 @@ public class DataRetriever {
             }
 
         }
-        UnionServiceController.addUnionized(unionDTO.getIndex(), union);
-        EmployeeController.Empregados.get(unionDTO.getEmployeeID()).setUnionized(union);
+        if (EmployeeController.Empregados.get(unionDTO.getEmployeeID()).getSindicalizado()) {
+            UnionServiceController.addUnionized(unionDTO.getIndex(), union);
+            EmployeeController.Empregados.get(unionDTO.getEmployeeID()).setUnionized(union);
+        }
 
     }
 
