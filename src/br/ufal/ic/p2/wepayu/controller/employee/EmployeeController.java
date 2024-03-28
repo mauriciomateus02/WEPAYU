@@ -11,7 +11,7 @@ import br.ufal.ic.p2.wepayu.models.Employee.Employee;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.Employee.Hourly.EmpregadoHorista;
 import br.ufal.ic.p2.wepayu.models.Employee.Salaried.EmpregadoAssalariado;
-import br.ufal.ic.p2.wepayu.utils.MenuAttribut;
+import br.ufal.ic.p2.wepayu.utils.MenuAttribute;
 import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
 import br.ufal.ic.p2.wepayu.utils.Validator.ValidatorEmployee;
@@ -101,7 +101,7 @@ public class EmployeeController {
         throw new ExceptionGetEmpregado("Nao ha empregado com esse nome.");
     }
 
-    public static String getAtributo(String emp, String attribut)
+    public static String getAtributo(String emp, String attribute)
 
             throws EmpregadoNaoExisteException, ExceptionGetEmpregado {
 
@@ -116,7 +116,7 @@ public class EmployeeController {
         empr = EmployeeController.Empregados.get(emp);
 
         // exibe o atributo buscado pelo usuário do empregado desejado
-        return MenuAttribut.getValueAttribut(empr, attribut);
+        return MenuAttribute.getValueAttribute(empr, attribute);
     }
 
     public static void removerEmpregado(String emp)
@@ -143,7 +143,7 @@ public class EmployeeController {
         }
         Employee employee = EmployeeController.Empregados.get(emp);
 
-        MenuAttribut.setValueAttribut(emp, employee, attribut, value);
+        MenuAttribute.setValueAttribute(emp, employee, attribut, value);
 
     }
 
@@ -173,7 +173,7 @@ public class EmployeeController {
 
         Employee employee = Empregados.get(emp);
 
-        MenuAttribut.setValueAttribut(emp, employee, attribut, value, commission);
+        MenuAttribute.setValueAttribute(emp, employee, attribut, value, commission);
 
     }
 
@@ -191,7 +191,7 @@ public class EmployeeController {
 
         Employee employee = Empregados.get(emp);
         // chama a função que vai verificar e alterar o empregado sindicalizado.
-        MenuAttribut.setValueAttribut(emp, employee, attribut, value, unionID, unionFee);
+        MenuAttribute.setValueAttribute(emp, employee, attribut, value, unionID, unionFee);
 
     }
 }

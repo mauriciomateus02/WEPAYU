@@ -154,12 +154,12 @@ public class Conversor {
         EmployeeController.Empregados.put(employeeID, NewEmployee);
     }
 
-    public static float conversorNumeric(String attribut, String value) throws ExceptionGetEmpregado {
+    public static float conversorNumeric(String attribute, String value) throws ExceptionGetEmpregado {
         try {
             return Float.parseFloat(value);
         } catch (Exception e) {
 
-            switch (attribut) {
+            switch (attribute) {
                 case "salario":
                     throw new ExceptionGetEmpregado("Salario deve ser numerico.");
                 case "comissao":

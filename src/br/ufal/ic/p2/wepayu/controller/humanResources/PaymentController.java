@@ -44,7 +44,7 @@ public class PaymentController {
 
         Payment payment;
         // verifica se os atributos foram enviados corretamente
-        validateAttribut(method, bank, agency, accountNumber);
+        validateAttribute(method, bank, agency, accountNumber);
 
         if (method.equals("banco")) {
             // cria o método de pagamento
@@ -61,7 +61,7 @@ public class PaymentController {
         methodsPayment.put(employeeID, payment);
     }
 
-    private static void validateAttribut(String method, String bank, String agency, String accountNumber)
+    private static void validateAttribute(String method, String bank, String agency, String accountNumber)
             throws ExceptionGetEmpregado {
 
         if (method.isEmpty()) {

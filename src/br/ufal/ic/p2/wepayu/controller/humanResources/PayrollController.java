@@ -8,6 +8,7 @@ import java.util.zip.DataFormatException;
 import br.ufal.ic.p2.wepayu.Exception.*;
 import br.ufal.ic.p2.wepayu.models.Payroll.Payroll;
 import br.ufal.ic.p2.wepayu.models.Payroll.TotalPayroll;
+import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 
 public class PayrollController {
 
@@ -21,7 +22,8 @@ public class PayrollController {
             throw new ExceptionGetEmpregado("Data deve ser nao nulo.");
 
         TotalPayroll totalPay = new TotalPayroll(data);
-        return totalPay.getPayroll();
+
+        return Conversor.converterCharacter(totalPay.getPayroll());
     }
 
     public static void createPaymentDay(String day) throws ExceptionCreatePaymentDay {

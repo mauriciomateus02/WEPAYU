@@ -10,12 +10,12 @@ import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.Payment.PaymentInBank;
 import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 
-public class MenuAttribut {
-    public static String getValueAttribut(Employee emp, String attribut) throws ExceptionGetEmpregado {
+public class MenuAttribute {
+    public static String getValueAttribute(Employee emp, String attribute) throws ExceptionGetEmpregado {
 
         String str;
 
-        switch (attribut) {
+        switch (attribute) {
             case "nome":
                 return emp.getNome();
 
@@ -82,18 +82,18 @@ public class MenuAttribut {
         }
     }
 
-    public static void setValueAttribut(String emp, Employee employee, String attribut, String valueAttribut,
-            String unionID,
-            String unionfee) throws ExceptionGetEmpregado {
+    public static void setValueAttribute(String emp, Employee employee, String attribute, String valueAttribute,
+                                         String unionID,
+                                         String unionfee) throws ExceptionGetEmpregado {
 
-        switch (attribut) {
+        switch (attribute) {
             case "sindicalizado":
                 // verifica se o empregado já é sindicalizado, caso contrario altera
                 if (employee.getSindicalizado()) {
                     UnionServiceController.setUnionized(emp, unionID, unionfee);
                 } else {
                     UnionServiceController.createEmployeeUnionzed(emp, unionID, unionfee);
-                    employee.setSindicalizado(Boolean.parseBoolean(valueAttribut));
+                    employee.setSindicalizado(Boolean.parseBoolean(valueAttribute));
                 }
                 break;
             default:
@@ -102,7 +102,7 @@ public class MenuAttribut {
 
     }
 
-    public static void setValueAttribut(String employeeID, Employee emp, String attribut, String value)
+    public static void setValueAttribute(String employeeID, Employee emp, String attribut, String value)
             throws ExceptionGetEmpregado, NumberFormatException, ExceptionCriarEmpregado {
         // vwriavel para auxliar na conversão dos numeros
         float aux;
@@ -196,8 +196,8 @@ public class MenuAttribut {
         }
     }
 
-    public static void setValueAttribut(String employeeID, Employee emp, String attribut, String value,
-            String amount) throws ExceptionGetEmpregado, NumberFormatException, ExceptionCriarEmpregado {
+    public static void setValueAttribute(String employeeID, Employee emp, String attribut, String value,
+                                         String amount) throws ExceptionGetEmpregado, NumberFormatException, ExceptionCriarEmpregado {
         if (amount.isEmpty() && value.equals("comissionado")) {
             throw new ExceptionGetEmpregado("comissao deve ser positiva.");
         } else if (amount.isEmpty() && value.equals("horista")) {

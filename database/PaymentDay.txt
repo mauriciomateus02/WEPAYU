@@ -1,5 +1,0 @@
-semanal 5
-mensal $
-semanal 2 5
-mensal 1
-semanal 2
