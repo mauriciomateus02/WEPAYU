@@ -1,67 +1,61 @@
 package br.ufal.ic.p2.wepayu.middleware;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
-import br.ufal.ic.p2.wepayu.Exception.ExceptionCreatePaymentDay;
-import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
 import br.ufal.ic.p2.wepayu.controller.employee.EmployeeController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PayrollController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
-import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.GetFiles;
-import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.PushFiles;
-import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.removeLine;
-import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.resetFiles;
+import br.ufal.ic.p2.wepayu.models.StrategyDB.CreateEntityDB;
+import br.ufal.ic.p2.wepayu.models.StrategyDB.DBConnection;
+import br.ufal.ic.p2.wepayu.models.StrategyDB.DeleteEntityDB;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
 
 public class DBHandler {
 
     private static String file;
 
-    public static void getData(getEnumDatabase type)
-            throws FileNotFoundException {
+    public void getData(getEnumDatabase type, DBConnection db) throws Exception {
 
-        GetFiles getFiles = new GetFiles();
         searchDatabase(type);
-
-        getFiles.getEntites(file);
+        db.connect(file);
 
         if (type == getEnumDatabase.Employee) {
             EmployeeController.index += 1;
         }
     }
 
-    public static <T> void uploadData(getEnumDatabase type, HashMap<String, T> map)
-            throws EmpregadoNaoExisteException, ExceptionCriarEmpregado {
+    public <T> void uploadData(getEnumDatabase type, CreateEntityDB db, HashMap<String, T> map)
+            throws Exception {
 
         selectDatabase(type);
-        PushFiles.uploadData(file, map);
+        db.connect(file, map);
 
     }
 
-    public static void uploadData(getEnumDatabase type, ArrayList<String> list) throws ExceptionCreatePaymentDay {
+    public void uploadData(getEnumDatabase type, CreateEntityDB db, ArrayList<String> list) throws Exception {
 
         selectDatabase(type);
-        PushFiles.upload(list, file);
+        db.connect(file, list);
 
     }
 
-    public static void removeData(getEnumDatabase type, String key)
-            throws FileNotFoundException, EmpregadoNaoExisteException {
+    public void removeData(getEnumDatabase type, DeleteEntityDB db, String key)
+            throws Exception {
 
         selectDatabase(type);
-        removeLine.removeEntities(file, key);
+
+        db.connect(file, key);
         selectDatabase(getEnumDatabase.Payment);
-        removeLine.removeEntities(file, key);
+        db.connect(file, key);
     }
 
-    public static void resetData(getEnumDatabase type) throws FileNotFoundException {
+    public void resetData(getEnumDatabase type, DBConnection db) throws Exception {
 
         searchDatabase(type);
-        resetFiles.resetData(file);
+        db.connect(file);
+
     }
 
     private static void searchDatabase(getEnumDatabase type) {

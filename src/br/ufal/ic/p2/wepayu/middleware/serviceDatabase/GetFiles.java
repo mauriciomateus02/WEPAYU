@@ -4,10 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-public class GetFiles {
+import br.ufal.ic.p2.wepayu.models.StrategyDB.DBConnection;
 
-    public void getEntites(String file)
-            throws FileNotFoundException {
+public class GetFiles implements DBConnection {
+
+    @Override
+    public void connect(String file) throws FileNotFoundException {
 
         ValidatorOfEntity validatorOfEntity = new ValidatorOfEntity();
 

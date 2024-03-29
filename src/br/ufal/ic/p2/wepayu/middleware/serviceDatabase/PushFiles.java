@@ -10,10 +10,12 @@ import java.util.Map;
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCreatePaymentDay;
 import br.ufal.ic.p2.wepayu.Exception.ExceptionCriarEmpregado;
+import br.ufal.ic.p2.wepayu.models.StrategyDB.CreateEntityDB;
 
-public class PushFiles {
+public class PushFiles implements CreateEntityDB {
 
-    public static <T> void uploadData(String outputFile, HashMap<String, T> map)
+    @Override
+    public <K, T> void connect(String outputFile, HashMap<K, T> map)
             throws EmpregadoNaoExisteException, ExceptionCriarEmpregado {
 
         File file = new File(outputFile);
@@ -24,7 +26,7 @@ public class PushFiles {
             // cria o buffer para salvar os dados no txt
             bf = new BufferedWriter(new FileWriter(file, true));
 
-            for (Map.Entry<String, T> entry : map.entrySet()) {
+            for (Map.Entry<K, T> entry : map.entrySet()) {
                 // adiciona todas as informações dos empregados no txt
                 bf.write(entry.getKey() + ";" + entry.getValue().toString());
                 bf.newLine();
@@ -43,19 +45,18 @@ public class PushFiles {
                 throw new ExceptionCriarEmpregado("Erro em salvar os dados");
             }
         }
-
     }
 
-    public static void upload(ArrayList<String> list, String outFile)
-            throws ExceptionCreatePaymentDay {
+    @Override
+    public void connect(String file, ArrayList<String> list) throws ExceptionCreatePaymentDay {
 
-        File file = new File(outFile);
+        File outfile = new File(file);
         BufferedWriter bf = null;
 
         try {
 
             // cria o buffer para salvar os dados no txt
-            bf = new BufferedWriter(new FileWriter(file, true));
+            bf = new BufferedWriter(new FileWriter(outfile, true));
 
             for (String item : list) {
                 // adiciona todas as informações dos empregados no txt

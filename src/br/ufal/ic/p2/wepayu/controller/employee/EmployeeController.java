@@ -1,16 +1,17 @@
 package br.ufal.ic.p2.wepayu.controller.employee;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
 import br.ufal.ic.p2.wepayu.Exception.*;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
 import br.ufal.ic.p2.wepayu.middleware.DBHandler;
+import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.removeLine;
 import br.ufal.ic.p2.wepayu.models.Employee.Employee;
 import br.ufal.ic.p2.wepayu.models.Employee.Commissioned.EmpregadoComissionado;
 import br.ufal.ic.p2.wepayu.models.Employee.Hourly.EmpregadoHorista;
 import br.ufal.ic.p2.wepayu.models.Employee.Salaried.EmpregadoAssalariado;
+import br.ufal.ic.p2.wepayu.models.StrategyDB.DeleteEntityDB;
 import br.ufal.ic.p2.wepayu.utils.MenuAttribut;
 import br.ufal.ic.p2.wepayu.utils.Conversor.Conversor;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
@@ -120,14 +121,17 @@ public class EmployeeController {
     }
 
     public static void removerEmpregado(String emp)
-            throws EmpregadoNaoExisteException, ExceptionRemoveEmpregado, FileNotFoundException {
+            throws Exception {
         // verifica se o id é nulo
         if (emp.isEmpty()) {
             throw new ExceptionRemoveEmpregado();
         } else if (Empregados.get(emp) == null) {
             throw new EmpregadoNaoExisteException();
         } else {
-            DBHandler.removeData(getEnumDatabase.Employee, emp);
+            DBHandler dbHandler = new DBHandler();
+            DeleteEntityDB db = new removeLine();
+
+            dbHandler.removeData(getEnumDatabase.Employee, db, emp);
             Empregados.remove(emp);
             PaymentController.methodsPayment.remove(emp);
         }

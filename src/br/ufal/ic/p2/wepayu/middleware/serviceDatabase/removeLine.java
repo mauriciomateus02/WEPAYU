@@ -7,9 +7,12 @@ import java.io.FileWriter;
 import java.io.FileNotFoundException;
 
 import br.ufal.ic.p2.wepayu.Exception.EmpregadoNaoExisteException;
+import br.ufal.ic.p2.wepayu.models.StrategyDB.DeleteEntityDB;
 
-public class removeLine {
-    public static void removeEntities(String file, String key)
+public class removeLine implements DeleteEntityDB {
+
+    @Override
+    public void connect(String file, String key)
             throws EmpregadoNaoExisteException, FileNotFoundException {
 
         try {

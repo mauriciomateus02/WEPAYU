@@ -4,8 +4,12 @@ import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
-public class resetFiles {
-    public static void resetData(String file) throws FileNotFoundException {
+import br.ufal.ic.p2.wepayu.models.StrategyDB.DBConnection;
+
+public class resetFiles implements DBConnection {
+
+    @Override
+    public void connect(String file) throws FileNotFoundException {
 
         try {
 

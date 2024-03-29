@@ -7,34 +7,45 @@ import br.ufal.ic.p2.wepayu.controller.humanResources.PaymentController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.PayrollController;
 import br.ufal.ic.p2.wepayu.controller.humanResources.UnionServiceController;
 import br.ufal.ic.p2.wepayu.middleware.DBHandler;
+import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.GetFiles;
+import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.PushFiles;
+import br.ufal.ic.p2.wepayu.middleware.serviceDatabase.resetFiles;
+import br.ufal.ic.p2.wepayu.models.StrategyDB.CreateEntityDB;
+import br.ufal.ic.p2.wepayu.models.StrategyDB.DBConnection;
 import br.ufal.ic.p2.wepayu.utils.EnumType.getEnumDatabase;
-
-import java.io.FileNotFoundException;
 
 public class Facade {
 
-    public Facade() throws FileNotFoundException {
-        DBHandler.getData(getEnumDatabase.Employee);
-        DBHandler.getData(getEnumDatabase.Unionized);
-        DBHandler.getData(getEnumDatabase.Payment);
-        DBHandler.getData(getEnumDatabase.PaymentDay);
+    public Facade() throws Exception {
+        DBConnection db = new GetFiles();
+        DBHandler dbHandler = new DBHandler();
+        dbHandler.getData(getEnumDatabase.Employee, db);
+        dbHandler.getData(getEnumDatabase.Unionized, db);
+        dbHandler.getData(getEnumDatabase.Payment, db);
+        dbHandler.getData(getEnumDatabase.PaymentDay, db);
     }
 
-    public void zerarSistema() throws FileNotFoundException {
-        DBHandler.resetData(getEnumDatabase.Employee);
-        DBHandler.resetData(getEnumDatabase.Unionized);
-        DBHandler.resetData(getEnumDatabase.Payment);
-        DBHandler.resetData(getEnumDatabase.PaymentDay);
+    public void zerarSistema() throws Exception {
+
+        DBConnection db = new resetFiles();
+        DBHandler dbHandler = new DBHandler();
+
+        dbHandler.resetData(getEnumDatabase.Employee, db);
+        dbHandler.resetData(getEnumDatabase.Unionized, db);
+        dbHandler.resetData(getEnumDatabase.Payment, db);
+        dbHandler.resetData(getEnumDatabase.PaymentDay, db);
         PayrollController.resetPaymentDay();
     }
 
     public void encerrarSistema() throws Exception {
         /* Faz upload dos empregados criados */
+        CreateEntityDB db = new PushFiles();
+        DBHandler dbHandler = new DBHandler();
 
-        DBHandler.uploadData(getEnumDatabase.Employee, EmployeeController.Empregados);
-        DBHandler.uploadData(getEnumDatabase.Unionized, UnionServiceController.employeesUnionzed);
-        DBHandler.uploadData(getEnumDatabase.Payment, PaymentController.methodsPayment);
-        DBHandler.uploadData(getEnumDatabase.PaymentDay, PayrollController.PaymentDays);
+        dbHandler.uploadData(getEnumDatabase.Employee, db, EmployeeController.Empregados);
+        dbHandler.uploadData(getEnumDatabase.Unionized, db, UnionServiceController.employeesUnionzed);
+        dbHandler.uploadData(getEnumDatabase.Payment, db, PaymentController.methodsPayment);
+        dbHandler.uploadData(getEnumDatabase.PaymentDay, db, PayrollController.PaymentDays);
     }
 
     public String criarEmpregado(String nome, String endereco, String tipo, String salario)
